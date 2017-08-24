@@ -4,3 +4,6 @@
 
 # Java build files
 target/
+
+# Package Files #
+*.jar
