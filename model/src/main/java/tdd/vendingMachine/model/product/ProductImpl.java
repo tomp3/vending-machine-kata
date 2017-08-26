@@ -1,10 +1,8 @@
-package tdd.model.vendingMachine.product.concrete;
+package tdd.vendingMachine.model.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import tdd.model.vendingMachine.product.ProductType;
-import tdd.model.vendingMachine.product.api.Product;
 
 /**
  * Default product implementation.
@@ -14,11 +12,11 @@ import tdd.model.vendingMachine.product.api.Product;
 @AllArgsConstructor
 class ProductImpl implements Product {
     /**
-     * Product's name.
-     */
-    private String name;
-    /**
      * Product's type.
      */
     private ProductType productType;
+    /**
+     * Product's container.
+     */
+    private ProductContainer productContainer;
 }

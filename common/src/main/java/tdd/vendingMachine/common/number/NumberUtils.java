@@ -1,13 +1,7 @@
 package tdd.vendingMachine.common.number;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class with number util methods.
@@ -15,50 +9,106 @@ import java.util.List;
 public class NumberUtils {
 
     /**
-     * Default MathContext for number operations.
+     * Default scale.
      */
-    public static final MathContext SCALE_2_ROUND_HALF_UP = new MathContext(2, RoundingMode.HALF_UP);
+    public static final int SCALE_2 = 2;
+    /**
+     * Default rounding mode.
+     */
+    public static final RoundingMode ROUND_HALF_UP = RoundingMode.HALF_UP;
     private static final BigDecimal MULTIPLICATION_NEUTRAL = BigDecimal.ONE;
+
+
+    public static final BigDecimal BD_TEN = BigDecimal.valueOf(10);
+    public static final Integer INT_ZERO = 0;
 
     private NumberUtils() {
     }
 
     /**
      * Multiplies {@link BigDecimal} objects and returns multiplication product.
-     * First multiplication factor is required.
+     * If no scale is provided, uses default scale defined as {@link #SCALE_2}.
+     * If no rounding mode is provided, uses default rounding mode defined as {@link #ROUND_HALF_UP}.
      *
-     * @param mathContext multiplication {@link MathContext}.
-     * @param first       first multiplication factor.
-     * @param numbers     other multiplication factors.
-     * @return multiplication product.
+     * @param first        first multiplication factor.
+     * @param second       second multiplication factor.
+     * @param scale        multiplication scale.
+     * @param roundingMode rounding mode.
+     * @return multiplication result.
      */
-    public static BigDecimal multiply(MathContext mathContext, BigDecimal first, BigDecimal... numbers) {
-        if (first == null) {
-            throw new IllegalArgumentException("Factors required.");
+    public static BigDecimal multiply(BigDecimal first, BigDecimal second, Integer scale, RoundingMode roundingMode) {
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Both factors required.");
         }
-        if (mathContext == null) {
-            return multiply(first, numbers);
-        }
-        if (ArrayUtils.isEmpty(numbers)) {
-            return first;
-        }
-
-        List<BigDecimal> factors = new ArrayList<>(Arrays.asList(numbers));
-        factors.add(first);
-        return factors.stream().reduce(MULTIPLICATION_NEUTRAL, (a, b) -> a.multiply(b, mathContext));
+        int mScale = scale == null ? SCALE_2 : scale;
+        RoundingMode mRoundingMode = roundingMode == null ? ROUND_HALF_UP : roundingMode;
+        return first.multiply(second).setScale(mScale, mRoundingMode);
     }
 
     /**
      * Multiplies {@link BigDecimal} objects and returns multiplication product.
-     * First multiplication factor is required.
-     * Calls {@link NumberUtils#multiply(MathContext, BigDecimal, BigDecimal...)} method
-     * providing default math context defined as {@link NumberUtils#SCALE_2_ROUND_HALF_UP}.
      *
-     * @param first   first multiplication factor.
-     * @param numbers other multiplication factors.
+     * @param first  first multiplication factor.
+     * @param second second multiplication factor.
      * @return multiplication product.
      */
-    public static BigDecimal multiply(BigDecimal first, BigDecimal... numbers) {
-        return multiply(SCALE_2_ROUND_HALF_UP, first, numbers);
+    public static BigDecimal multiply(BigDecimal first, BigDecimal second) {
+        return multiply(first, second, SCALE_2, ROUND_HALF_UP);
+    }
+
+    /**
+     * Checks if the given number is zero.
+     *
+     * @param value tested value.
+     * @return {@code true} if given value is zero, {@code false} otherwise.
+     */
+    public static boolean isZero(Integer value) {
+        return value == 0;
+    }
+
+    /**
+     * Checks if the given number is different to zero.
+     *
+     * @param value tested value.
+     * @return {@code true} if given value is not zero, {@code false} otherwise.
+     */
+    public static boolean isNotZero(Integer value) {
+        return value != 0;
+    }
+
+    /**
+     * Divides given dividend by the given divisor setting given scale and rounding mode.
+     * If no scale is provided, uses default scale defined as {@link #SCALE_2}.
+     * If no rounding mode is provided, uses default rounding mode defined as {@link #ROUND_HALF_UP}.
+     *
+     * @param dividend dividend.
+     * @param divisor  divisor.
+     * @return division result.
+     */
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, Integer scale, RoundingMode roundingMode) {
+        if (dividend == null) {
+            throw new IllegalArgumentException("Dividend required.");
+        }
+        if (divisor == null) {
+            throw new IllegalArgumentException("Divisor required.");
+        }
+        if (BigDecimal.ZERO.compareTo(divisor) == 0) {
+            throw new IllegalArgumentException("Division by 0 is disallowed.");
+        }
+        int mScale = scale == null ? SCALE_2 : scale;
+        RoundingMode mRoundingMode = roundingMode == null ? ROUND_HALF_UP : roundingMode;
+        return dividend.divide(divisor, mScale, mRoundingMode);
+    }
+
+    /**
+     * Divides given dividend by the given divisor setting default scale ({@link #SCALE_2} and rounding mode ({@link #ROUND_HALF_UP}).
+     * Calls {@link #divide(BigDecimal, BigDecimal, Integer, RoundingMode)} method providing default scale and rounding mode.
+     *
+     * @param dividend dividend.
+     * @param divisor  divisor.
+     * @return division result.
+     */
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor) {
+        return divide(dividend, divisor, SCALE_2, ROUND_HALF_UP);
     }
 }
