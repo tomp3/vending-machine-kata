@@ -12,13 +12,13 @@ public class CurrencyUtilsTest {
     @Test
     public void testNormalizeValue() {
         BigDecimal value = new BigDecimal(12.50);
-        assertThat(CurrencyUtils.normalizeCurrency(value)).isEqualTo(1250);
+        assertThat(CurrencyUtils.normalizeCurrency(value)).isEqualTo(125);
     }
 
     @Test
     public void testDenormalizeValue() {
-        int value = 399;
+        int value = 39;
         assertThat(CurrencyUtils.denormalizeCurrency(value))
-            .isEqualTo(new BigDecimal(3.99).setScale(2, RoundingMode.HALF_UP));
+            .isEqualTo(new BigDecimal(3.9).setScale(1, RoundingMode.HALF_UP));
     }
 }
