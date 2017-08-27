@@ -35,5 +35,21 @@ public class CoinChangeServiceTest {
         }
         assertThatThrownBy(() -> testedService.calculateChange(coins, new BigDecimal(0.7), BigDecimal.ONE));
 
+        Map<CoinType, Integer> otherCoins = ImmutableMap.<CoinType, Integer>builder()
+            .put(CoinType.FIVE, 1)
+            .put(CoinType.TWO, 3)
+            .put(CoinType.ONE, 0)
+            .put(CoinType.POINT_FIVE, 1)
+            .put(CoinType.POINT_TWO, 2)
+            .put(CoinType.POINT_ONE, 0)
+            .build();
+
+        try {
+            Map<CoinType, Integer> change = testedService.calculateChange(otherCoins, BigDecimal.valueOf(4), BigDecimal.TEN);
+            change.forEach((k,v) -> System.out.println(k.getValue() + "\t" + v));
+        } catch (ChangeImpossibleException e) {
+            fail(e.getMessage(), e);
+        }
+
     }
 }
