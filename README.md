@@ -49,4 +49,6 @@ The assignment
 10. After selecting a shelve and inserting enough money we will get the product and the change (but machine has to have money to be able to return the change).
 11. After selecting a shelve and inserting insufficient money to buy a product, user has to press "Cancel" to get their money back.
 12. If machine does not have enough money to give the change it must show a warning message and return the money user has put, and it should not give the product.
+<br/>_At this point, machine could give the biggest amount of change possible, in case the user agreed not to be given the full change amount 
+(imagine that vending machine was the only source of drinking water in the area)._ (TP)
 13. Machine can return change using only money that was put into it (or by someone at start or by people who bought goods). Machine cannot create it's own money!
