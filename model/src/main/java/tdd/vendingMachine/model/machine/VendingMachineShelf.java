@@ -7,6 +7,7 @@ import tdd.vendingMachine.model.common.Shelf;
 import tdd.vendingMachine.model.product.Product;
 import tdd.vendingMachine.model.product.ProductType;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Queue;
@@ -29,9 +30,17 @@ public class VendingMachineShelf extends Shelf {
      */
     private final Queue<Product> products = Lists.newLinkedList();
 
-    public VendingMachineShelf(ProductType productType, int size) {
+    /**
+     * Stored product price.
+     */
+    @Getter
+    @Setter
+    private BigDecimal productPrice;
+
+    public VendingMachineShelf(ProductType productType, int size, BigDecimal productPrice) {
         super(size);
         this.productType = productType;
+        this.productPrice = productPrice;
     }
 
     /**

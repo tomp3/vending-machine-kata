@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,12 +23,15 @@ public class VendingMachine {
      */
     private Map<String, VendingMachineShelf> shelves = Maps.newHashMap();
 
-    public VendingMachine(VendingMachineCash cash) {
+    private List<String> availableCodes;
+
+    public VendingMachine(VendingMachineCash cash, List<String> availableCodes) {
         this.cash = cash;
+        this.availableCodes = availableCodes;
     }
 
-    public VendingMachine(VendingMachineCash cash, Map<String, VendingMachineShelf> shelves) {
-        this(cash);
+    public VendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
+        this(cash, availableCodes);
         this.shelves = shelves;
     }
 }

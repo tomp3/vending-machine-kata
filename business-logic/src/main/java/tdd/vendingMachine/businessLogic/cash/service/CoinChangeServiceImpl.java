@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Default implementation of CoinChangeService.
  */
-public class CoinChangeServiceImpl implements CoinChangeService {
+class CoinChangeServiceImpl implements CoinChangeService {
 
     private static final CoinType[] COIN_TYPES_ASCENDING;
 

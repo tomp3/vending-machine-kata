@@ -8,6 +8,7 @@ import tdd.vendingMachine.model.product.ProductContainer;
 import tdd.vendingMachine.model.product.ProductContainerType;
 import tdd.vendingMachine.model.product.ProductType;
 
+import java.math.BigDecimal;
 import java.util.Queue;
 import java.util.stream.IntStream;
 
@@ -24,7 +25,7 @@ public class VendingMachineShelfTest {
     @Before
     public void beforeTests() {
         this.testedShelf =
-            new VendingMachineShelf(PRODUCT_TYPE, 10);
+            new VendingMachineShelf(PRODUCT_TYPE, 10, BigDecimal.ONE);
     }
 
 

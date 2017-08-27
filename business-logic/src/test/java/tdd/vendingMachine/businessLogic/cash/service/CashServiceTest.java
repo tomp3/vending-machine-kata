@@ -92,4 +92,25 @@ public class CashServiceTest {
         retrievedCoins = testedService.giveCoins(cash, ImmutableMap.<CoinType, Integer>builder().put(CoinType.TWO, 1).build());
         assertThat(retrievedCoins).hasSize(0);
     }
+
+    @Test
+    public void testCreateCashInstance() {
+        VendingMachineCash cash = testedService.createCash(MAX_COIN_COUNT, DEFAULT_COINS);
+        assertThat(cash.getCoins()).contains(
+            MapEntry.entry(CoinType.FIVE, 1),
+            MapEntry.entry(CoinType.TWO, 2),
+            MapEntry.entry(CoinType.ONE, 1),
+            MapEntry.entry(CoinType.POINT_FIVE, 1),
+            MapEntry.entry(CoinType.POINT_TWO, 2),
+            MapEntry.entry(CoinType.POINT_ONE, 0)
+        );
+        assertThat(cash.getMaxCoins()).contains(
+            MapEntry.entry(CoinType.POINT_ONE, 200),
+            MapEntry.entry(CoinType.POINT_TWO, 200),
+            MapEntry.entry(CoinType.POINT_FIVE, 170),
+            MapEntry.entry(CoinType.ONE, 150),
+            MapEntry.entry(CoinType.TWO, 150),
+            MapEntry.entry(CoinType.FIVE, 100)
+        );
+    }
 }

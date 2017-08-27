@@ -51,4 +51,13 @@ public interface CashService {
      * @return disposed coins. Returns no coins in case cash has less coins than required.
      */
     Map<CoinType, Integer> giveCoins(VendingMachineCash cash, Map<CoinType, Integer> coins);
+
+    /**
+     * Creates {@link VendingMachineCash} instance with given coin limit and inserts given coins into it.
+     *
+     * @param maxCoinCount coins limit.
+     * @param coins        initial coins.
+     * @return vending machine cash instance.
+     */
+    VendingMachineCash createCash(Map<CoinType, Integer> maxCoinCount, Map<CoinType, Integer> coins);
 }
