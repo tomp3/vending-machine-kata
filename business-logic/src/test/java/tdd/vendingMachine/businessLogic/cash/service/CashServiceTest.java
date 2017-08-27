@@ -51,6 +51,11 @@ public class CashServiceTest {
             MapEntry.entry(CoinType.POINT_FIVE, 30), MapEntry.entry(CoinType.ONE, 50),
             MapEntry.entry(CoinType.TWO, 50), MapEntry.entry(CoinType.FIVE, 100)
         );
+        assertThat(cash.getCoins()).contains(
+            MapEntry.entry(CoinType.POINT_ONE, 200), MapEntry.entry(CoinType.POINT_TWO, 200),
+            MapEntry.entry(CoinType.POINT_FIVE, 170), MapEntry.entry(CoinType.ONE, 150),
+            MapEntry.entry(CoinType.TWO, 150), MapEntry.entry(CoinType.FIVE, 100)
+        );
     }
 
     @Test
