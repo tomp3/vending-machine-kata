@@ -1,10 +1,12 @@
 package tdd.vendingMachine.model.product;
 
+import java.io.Serializable;
+
 /**
  * Product interface.
  * Every product has it's productContainer and type.
  */
-public interface Product {
+public interface Product extends Serializable {
     /**
      * Returns product's type.
      *

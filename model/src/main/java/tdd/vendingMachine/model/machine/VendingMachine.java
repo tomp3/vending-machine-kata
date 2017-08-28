@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class VendingMachine {
+public class VendingMachine implements Serializable {
     /**
      * Vending machine cash.
      */

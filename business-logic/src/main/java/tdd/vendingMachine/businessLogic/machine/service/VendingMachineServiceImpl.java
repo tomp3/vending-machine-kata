@@ -1,4 +1,4 @@
-package tdd.vendingMachine.businessLogic.machine;
+package tdd.vendingMachine.businessLogic.machine.service;
 
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
 import tdd.vendingMachine.model.machine.VendingMachine;
@@ -8,6 +8,7 @@ import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Default {@link VendingMachineService} implementation.
@@ -53,5 +54,14 @@ class VendingMachineServiceImpl implements VendingMachineService {
         String code = first.get();
         vendingMachine.getShelves().put(code, shelf);
         return code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, VendingMachineShelf> getUsedShelves(VendingMachine vendingMachine) {
+        return vendingMachine.getShelves().entrySet().stream().filter(e -> e.getValue() != null)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -1,4 +1,4 @@
-package tdd.vendingMachine.businessLogic.machine;
+package tdd.vendingMachine.businessLogic.machine.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -17,7 +17,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class VendingMachineServiceTest {
 
@@ -38,7 +39,7 @@ public class VendingMachineServiceTest {
         .put(CoinType.FIVE, 5)
         .build();
 
-    private static final List<String> AVAILABLE_CODES = ImmutableList.of("01", "02", "03", "04", "05");
+    private static final List<String> AVAILABLE_CODES = ImmutableList.of("01", "02", "03", "04", "05", "06", "07");
 
     private VendingMachineService testedService;
 
@@ -55,6 +56,7 @@ public class VendingMachineServiceTest {
         shelvesMap.put("02", new VendingMachineShelf(ProductType.COKE_0_33_BOTTLE, 12, BigDecimal.valueOf(2)));
         shelvesMap.put("03", new VendingMachineShelf(ProductType.COKE_0_50_BOTTLE, 8, new BigDecimal(3.5)));
         shelvesMap.put("04", new VendingMachineShelf(ProductType.PEANUTS_CAN_0_200, 10, new BigDecimal(2.2)));
+        shelvesMap.put("06", new VendingMachineShelf(ProductType.STILL_WATER_0_50_BOTTLE, 10, BigDecimal.valueOf(2)));
         vendingMachine = new VendingMachine(cash, AVAILABLE_CODES, shelvesMap);
     }
 
@@ -62,22 +64,27 @@ public class VendingMachineServiceTest {
     public void testCreateVendingMachine() {
         VendingMachine vendingMachine = testedService.createVendingMachine(cash, AVAILABLE_CODES, shelvesMap);
         assertThat(vendingMachine.getCash().getCoins()).hasSize(6);
-        assertThat(vendingMachine.getShelves()).hasSize(4);
+        assertThat(testedService.getUsedShelves(vendingMachine)).hasSize(shelvesMap.size());
     }
 
     @Test
-    public void testAddShelf() {
+    public void testAddShelf() throws UnavailableShelfCodeException {
         VendingMachineShelf shelf = new VendingMachineShelf(ProductType.ENERGY_DRINK_0_33_CAN, 12, BigDecimal.valueOf(3));
         assertThatThrownBy(() -> testedService.addShelve(vendingMachine, "01", shelf));
         assertThatThrownBy(() -> testedService.addShelve(vendingMachine, "10", shelf));
 
-        String code = null;
-        try {
-            code = testedService.addShelve(vendingMachine, shelf);
-        } catch (UnavailableShelfCodeException e) {
-            fail(e.getMessage(), e);
-        }
+        String code = testedService.addShelve(vendingMachine, shelf);
         assertThat(code).isEqualTo("05");
-        assertThat(vendingMachine.getShelves()).hasSize(5);
+        assertThat(testedService.getUsedShelves(vendingMachine)).hasSize(6);
+    }
+
+    @Test
+    public void testGetUsedShelves() throws UnavailableShelfCodeException {
+        VendingMachineShelf shelf = new VendingMachineShelf(ProductType.ENERGY_DRINK_0_33_CAN, 12, BigDecimal.valueOf(3));
+        testedService.addShelve(vendingMachine, shelf);
+        testedService.addShelve(vendingMachine, "07", null);
+
+        assertThat(testedService.getUsedShelves(vendingMachine)).hasSize(6);
+
     }
 }

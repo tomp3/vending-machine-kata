@@ -1,4 +1,4 @@
-package tdd.vendingMachine.businessLogic.machine;
+package tdd.vendingMachine.businessLogic.machine.service;
 
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
 import tdd.vendingMachine.model.machine.VendingMachine;
@@ -51,4 +51,11 @@ public interface VendingMachineService {
      * @throws UnavailableShelfCodeException exception thrown in case given code is unavailable (machine does not support such code).
      */
     String addShelve(VendingMachine vendingMachine, VendingMachineShelf shelf) throws UnavailableShelfCodeException;
+
+    /**
+     * Returns shelves used by the given vending machine.
+     *
+     * @return shelves used by the given vending machine.
+     */
+    Map<String, VendingMachineShelf> getUsedShelves(VendingMachine vendingMachine);
 }
