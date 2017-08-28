@@ -30,7 +30,6 @@ public final class VendingMachineActionHandlerFactory implements Factory<Vending
     /**
      * Disable disposal action handler instance.
      */
-    @VendingMachineActionType(VendingMachineActionType.ActionType.INT_DISABLE_DISPOSAL)
     private static final VendingMachineActionHandler<DisplayMessageAction, DisableDisposalAction> DISABLE_DISPOSAL_ACTION_HANDLER = (action) ->
         (DisableDisposalAction) action::getActionParameters;
 
