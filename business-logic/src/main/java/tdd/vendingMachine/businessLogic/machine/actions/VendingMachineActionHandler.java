@@ -6,7 +6,6 @@ package tdd.vendingMachine.businessLogic.machine.actions;
  * @param <K> handler return type.
  * @param <T> vending machine action type.
  */
-@FunctionalInterface
 public interface VendingMachineActionHandler<T, K> {
     /**
      * Handles vending machine action.

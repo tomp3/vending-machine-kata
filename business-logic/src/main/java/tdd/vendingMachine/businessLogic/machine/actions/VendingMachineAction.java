@@ -5,7 +5,6 @@ package tdd.vendingMachine.businessLogic.machine.actions;
  *
  * @param <T> action's parameter type.
  */
-@FunctionalInterface
 public interface VendingMachineAction<T> {
     /**
      * Returns action parameters.
@@ -13,4 +12,11 @@ public interface VendingMachineAction<T> {
      * @return action parameters.
      */
     T getActionParameters();
+
+    /**
+     * Returns action type.
+     *
+     * @return action type.
+     */
+    VendingMachineActionType getActionType();
 }
