@@ -11,8 +11,11 @@ import java.util.Map;
 /**
  * Vending machine action handlers' factory.
  */
-public class VendingMachineActionHandlerFactory implements Factory<VendingMachineAction, VendingMachineActionHandler> {
+public final class VendingMachineActionHandlerFactory implements Factory<VendingMachineAction, VendingMachineActionHandler> {
 
+    /**
+     * Vending machine action handler factory instance.
+     */
     private static final VendingMachineActionHandlerFactory INSTANCE = new VendingMachineActionHandlerFactory();
 
     /**
@@ -24,16 +27,34 @@ public class VendingMachineActionHandlerFactory implements Factory<VendingMachin
      * Null handler (null object pattern) - used while no handler is defined for given {@link VendingMachineActionType.ActionType action type}.
      */
     private static final VendingMachineActionHandler<Void, Void> NULL_HANDLER = v -> null;
+    /**
+     * Disable disposal action handler instance.
+     */
+    @VendingMachineActionType(VendingMachineActionType.ActionType.INT_DISABLE_DISPOSAL)
     private static final VendingMachineActionHandler<DisplayMessageAction, DisableDisposalAction> DISABLE_DISPOSAL_ACTION_HANDLER = (action) ->
         (DisableDisposalAction) action::getActionParameters;
 
+    /**
+     * Default constructor.
+     */
     private VendingMachineActionHandlerFactory() {
     }
 
+    /**
+     * Returns instance of the factory.
+     *
+     * @return instance of the factory.
+     */
     public static VendingMachineActionHandlerFactory getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Creates an instance of the action handler.
+     *
+     * @param action action.
+     * @return action handler.
+     */
     public VendingMachineActionHandler create(VendingMachineAction action) {
         VendingMachineActionType.ActionType actionType = findActionType(action);
         VendingMachineActionHandler handler = HANDLER_MAP.get(actionType);
@@ -79,6 +100,12 @@ public class VendingMachineActionHandlerFactory implements Factory<VendingMachin
         return handler;
     }
 
+    /**
+     * Gets action type from it's class annotation.
+     *
+     * @param action action.
+     * @return action type.
+     */
     private VendingMachineActionType.ActionType findActionType(VendingMachineAction action) {
         return action.getClass().getDeclaredAnnotation(VendingMachineActionType.class).value();
     }

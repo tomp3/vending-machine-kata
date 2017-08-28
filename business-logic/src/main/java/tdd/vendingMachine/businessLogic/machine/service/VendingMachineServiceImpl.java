@@ -15,8 +15,17 @@ import java.util.stream.Collectors;
  */
 class VendingMachineServiceImpl implements VendingMachineService {
 
+    /**
+     * Code already in use exception message.
+     */
     private static final String CODE_ALREADY_IN_USE_EXC_MSG = "Code %s is already in use.";
+    /**
+     * Code not supported exception message.
+     */
     private static final String CODE_NOT_SUPPORTED_EXC_MSG = "Vending machine does not support the given code (%s).";
+    /**
+     * All codes in use exception message.
+     */
     private static final String ALL_CODES_IN_USE_EXC_MSG = "All supported codes are already in use. Cannot add another shelf.";
 
     /**

@@ -37,6 +37,13 @@ public class VendingMachineShelf extends Shelf {
     @Setter
     private BigDecimal productPrice;
 
+    /**
+     * Constructor assigning shelf's product type, size and product price.
+     *
+     * @param productType  product type.
+     * @param size         shelf size.
+     * @param productPrice product price.
+     */
     public VendingMachineShelf(ProductType productType, int size, BigDecimal productPrice) {
         super(size);
         this.productType = productType;
@@ -61,14 +68,29 @@ public class VendingMachineShelf extends Shelf {
         products.add(product);
     }
 
+    /**
+     * Method peeking the first product on the shelf.
+     *
+     * @return first product on the shelf.
+     */
     public Optional<Product> peekProduct() {
         return Optional.ofNullable(products.peek());
     }
 
+    /**
+     * Method retrieving the first product from the shelf.
+     *
+     * @return retrieved product from the shelf.
+     */
     public Optional<Product> getProduct() {
         return Optional.ofNullable(products.poll());
     }
 
+    /**
+     * Returns all shelf's products - operations on the returned collection does not affect the actual shelf products.
+     *
+     * @return all shelf's products - operations on the returned collection does not affect the actual shelf products.
+     */
     public Collection<Product> getProducts() {
         return Lists.newLinkedList(products);
     }

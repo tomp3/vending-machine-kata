@@ -17,21 +17,44 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+/**
+ * {@link ShelfService} test.
+ */
 public class ShelfServiceTest {
 
+    /**
+     * Default product type.
+     */
     private static final ProductType DEFAULT_PRODUCT_TYPE = ProductType.CARBONATED_WATER_0_50_BOTTLE;
+    /**
+     * Default product container.
+     */
     private static final ProductContainer DEFAULT_PRODUCT_CONTAINER = new ProductContainer(ProductContainerType.BOTTLE_0_50, "FF33FF");
+    /**
+     * Default product.
+     */
     private static final Product DEFAULT_PRODUCT = Product.builder().productContainer(DEFAULT_PRODUCT_CONTAINER).productType(DEFAULT_PRODUCT_TYPE).build();
 
+    /**
+     * Tested object.
+     */
     private ShelfService testedService = ShelfService.newShelfService();
+    /**
+     * Vending machine's shelf.
+     */
     private VendingMachineShelf shelf;
 
+    /**
+     * Initializes vending machine's shelf.
+     */
     @Before
     public void beforeTest() {
         shelf = new VendingMachineShelf(DEFAULT_PRODUCT_TYPE, 10, BigDecimal.ONE);
     }
 
-
+    /**
+     * Tests methods inserting products to the shelf.
+     */
     @Test
     public void testShelfInsertProducts() {
         List<Product> products = Lists.newArrayList(Arrays.asList(DEFAULT_PRODUCT, DEFAULT_PRODUCT, DEFAULT_PRODUCT, DEFAULT_PRODUCT, DEFAULT_PRODUCT));
@@ -46,6 +69,9 @@ public class ShelfServiceTest {
         assertThat(this.testedService.insertProducts(shelf, Collections.singletonList(DEFAULT_PRODUCT))).hasSize(1);
     }
 
+    /**
+     * Tests methods dispensing product from the shelf.
+     */
     @Test
     public void testShelfDispenseProduct() {
         List<Product> products = Lists.newArrayList(Arrays.asList(DEFAULT_PRODUCT, DEFAULT_PRODUCT));

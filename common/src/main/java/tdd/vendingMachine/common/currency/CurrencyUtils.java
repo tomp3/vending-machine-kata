@@ -8,10 +8,19 @@ import java.math.RoundingMode;
 /**
  * Class with currency util methods.
  */
-public class CurrencyUtils {
+public final class CurrencyUtils {
 
+    /**
+     * Scale used in normalization operations.
+     */
     private static final int NORMALIZE_SCALE_0 = 0;
+    /**
+     * Scale used in denormalization operations.
+     */
     private static final int DENORMALIZE_SCALE_1 = 1;
+    /**
+     * Rounding mode - {@link RoundingMode#HALF_UP}.
+     */
     private static final RoundingMode ROUND_HALF_UP = RoundingMode.HALF_UP;
 
     /**
@@ -35,6 +44,9 @@ public class CurrencyUtils {
         return NumberUtils.divide(new BigDecimal(value), NumberUtils.BD_TEN, DENORMALIZE_SCALE_1, ROUND_HALF_UP);
     }
 
+    /**
+     * Default private constructor.
+     */
     private CurrencyUtils() {
     }
 }

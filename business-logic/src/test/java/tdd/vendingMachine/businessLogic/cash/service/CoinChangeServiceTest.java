@@ -12,10 +12,21 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+/**
+ * {@link CoinChangeService} test.
+ */
 public class CoinChangeServiceTest {
 
+    /**
+     * Tested object.
+     */
     private CoinChangeService testedService = CoinChangeService.newCoinChangeService();
 
+    /**
+     * Tests change calculation.
+     *
+     * @throws ChangeImpossibleException exception thrown in case there is no possible change combination.
+     */
     @Test
     public void testCalculateChange() throws ChangeImpossibleException {
         Map<CoinType, Integer> coins = ImmutableMap.<CoinType, Integer>builder()
@@ -27,10 +38,10 @@ public class CoinChangeServiceTest {
             .put(CoinType.POINT_ONE, 0)
             .build();
 
-        Map<CoinType, Integer> change = testedService.calculateChange(coins, new BigDecimal(0.1), new BigDecimal(5));
+        Map<CoinType, Integer> change = testedService.calculateChange(coins, BigDecimal.valueOf(0.1), BigDecimal.valueOf(5));
         assertThat(change).contains(MapEntry.entry(CoinType.TWO, 2), MapEntry.entry(CoinType.POINT_FIVE, 1),
             MapEntry.entry(CoinType.POINT_TWO, 2));
-        assertThatThrownBy(() -> testedService.calculateChange(coins, new BigDecimal(0.7), BigDecimal.ONE));
+        assertThatThrownBy(() -> testedService.calculateChange(coins, BigDecimal.valueOf(0.7), BigDecimal.ONE));
 
         Map<CoinType, Integer> otherCoins = ImmutableMap.<CoinType, Integer>builder()
             .put(CoinType.FIVE, 1)

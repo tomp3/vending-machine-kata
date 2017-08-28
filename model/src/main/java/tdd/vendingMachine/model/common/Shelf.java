@@ -12,6 +12,9 @@ import java.io.Serializable;
  */
 @RequiredArgsConstructor
 public class Shelf implements Serializable {
+    /**
+     * Shelf size.
+     */
     @Getter
     protected final int size;
 }

@@ -30,6 +30,11 @@ public class VendingMachineCash implements Serializable {
     @Setter
     private Map<CoinType, Integer> maxCoins;
 
+    /**
+     * Constructor assigning max coins values.
+     *
+     * @param maxCoins max coins values.
+     */
     public VendingMachineCash(Map<CoinType, Integer> maxCoins) {
         this.maxCoins = maxCoins;
     }

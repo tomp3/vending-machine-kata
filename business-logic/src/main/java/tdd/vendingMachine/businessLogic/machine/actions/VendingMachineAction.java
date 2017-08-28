@@ -7,5 +7,10 @@ package tdd.vendingMachine.businessLogic.machine.actions;
  */
 @FunctionalInterface
 public interface VendingMachineAction<T> {
+    /**
+     * Returns action parameters.
+     *
+     * @return action parameters.
+     */
     T getActionParameters();
 }

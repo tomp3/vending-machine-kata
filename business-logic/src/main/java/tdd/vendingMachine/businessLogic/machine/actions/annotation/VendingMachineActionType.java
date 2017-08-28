@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.LOCAL_VARIABLE})
 public @interface VendingMachineActionType {
 
     ActionType value();

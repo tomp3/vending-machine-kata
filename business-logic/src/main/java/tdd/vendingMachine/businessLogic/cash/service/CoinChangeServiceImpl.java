@@ -9,7 +9,6 @@ import tdd.vendingMachine.common.number.NumberUtils;
 import tdd.vendingMachine.model.common.CoinType;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -17,16 +16,17 @@ import java.util.*;
  */
 class CoinChangeServiceImpl implements CoinChangeService {
 
+    /**
+     * An array containing coin types sorted ascending.
+     */
     private static final CoinType[] COIN_TYPES_ASCENDING;
+
 
     static {
         CoinType[] coinTypes = CoinType.values();
         Arrays.sort(coinTypes, Comparator.comparingInt(CoinType::getValue));
         COIN_TYPES_ASCENDING = coinTypes;
     }
-
-    private static final int COIN_COUNT_SCALE = 0;
-    private static final RoundingMode COIN_COUNT_ROUNDING_MODE = RoundingMode.FLOOR;
 
     /**
      * {@inheritDoc}
@@ -42,16 +42,41 @@ class CoinChangeServiceImpl implements CoinChangeService {
         return findCoins(coins, changeAmount);
     }
 
+    /**
+     * Method finding given amount using given coins.
+     *
+     * @param coins  coins available.
+     * @param amount amount to be given.
+     * @return change in the form of a map containing coin type - coin count pairs.
+     * @throws ChangeImpossibleException exception thrown in case there is no change combination.
+     */
     private Map<CoinType, Integer> findCoins(Map<CoinType, Integer> coins, int amount) throws ChangeImpossibleException {
         return findCoins(prepareCoinList(coins), amount);
     }
 
+    /**
+     * Method preparing coin list, converting given coins map.
+     * List contains {@link MutablePair} objects holding coin type and coin count.
+     * List is used because of the availability to access given coin types via their index on the list.
+     *
+     * @param coins coins to be transformed.
+     * @return List of {@link MutablePair} objects holding coin type and coin count.
+     */
     private List<MutablePair<CoinType, Integer>> prepareCoinList(Map<CoinType, Integer> coins) {
-        List<MutablePair<CoinType, Integer>> coinList = Lists.newLinkedList();
+        List<MutablePair<CoinType, Integer>> coinList = Lists.newArrayList();
         Arrays.stream(COIN_TYPES_ASCENDING).forEach(ct -> coinList.add(MutablePair.of(ct, Optional.ofNullable(coins.get(ct)).orElse(0))));
         return coinList;
     }
 
+    /**
+     * Method implementing change finding algorithm.
+     * Finds the given amount using coins available.
+     *
+     * @param coins  coins available.
+     * @param amount amount of change to be given.
+     * @return change in form of coins combination, containing coin types and their counts.
+     * @throws ChangeImpossibleException exception thrown in case there is no valid change combination.
+     */
     private Map<CoinType, Integer> findCoins(List<MutablePair<CoinType, Integer>> coins, int amount) throws ChangeImpossibleException {
         Map<CoinType, Integer> change = Collections.emptyMap();
 
@@ -90,12 +115,19 @@ class CoinChangeServiceImpl implements CoinChangeService {
         }
         // if change amount is different to 0 after having iterated over every combination
         // change cannot be given
-        if(changeAmount != 0){
+        if (changeAmount != 0) {
             throw new ChangeImpossibleException();
         }
         return change;
     }
 
+    /**
+     * Method generating a new instance of a map, having all coin types as it's keys
+     * with all values set to 0.
+     *
+     * @return instance of a map, having all coin types as it's keys
+     * with all values set to 0.
+     */
     private Map<CoinType, Integer> resetChangeMap() {
         Map<CoinType, Integer> changeMap = Maps.newHashMap();
         Arrays.stream(COIN_TYPES_ASCENDING).forEach(ct -> changeMap.put(ct, 0));

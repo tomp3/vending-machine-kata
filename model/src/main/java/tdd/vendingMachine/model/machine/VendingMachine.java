@@ -24,15 +24,21 @@ public class VendingMachine implements Serializable {
      */
     private Map<String, VendingMachineShelf> shelves = Maps.newHashMap();
 
+    /**
+     * Available shelves' codes.
+     */
     private List<String> availableCodes;
 
-    public VendingMachine(VendingMachineCash cash, List<String> availableCodes) {
+    /**
+     * Constructor assigning given vending machine cash, available shelves' codes and shelves.
+     *
+     * @param cash           vending machine cash.
+     * @param availableCodes available shelves' codes.
+     * @param shelves        shelves.
+     */
+    public VendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
         this.cash = cash;
         this.availableCodes = availableCodes;
-    }
-
-    public VendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
-        this(cash, availableCodes);
         this.shelves = shelves;
     }
 }

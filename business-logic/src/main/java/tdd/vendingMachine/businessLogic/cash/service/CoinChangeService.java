@@ -10,6 +10,11 @@ import java.util.Map;
  * Service used to calculate coin change possibilities.
  */
 public interface CoinChangeService {
+    /**
+     * Method creating an instance of the service using default implementation defined as {@link CoinChangeServiceImpl}.
+     *
+     * @return new service instance.
+     */
     static CoinChangeService newCoinChangeService() {
         return new CoinChangeServiceImpl();
     }

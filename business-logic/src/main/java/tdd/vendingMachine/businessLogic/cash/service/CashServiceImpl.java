@@ -16,7 +16,10 @@ import java.util.Map;
  */
 class CashServiceImpl implements CashService {
 
-    private CoinChangeService coinChangeService = CoinChangeService.newCoinChangeService();
+    /**
+     * Instance of service responsible for change calculations.
+     */
+    private final CoinChangeService coinChangeService = CoinChangeService.newCoinChangeService();
 
     /**
      * {@inheritDoc}

@@ -14,14 +14,29 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * {@link VendingMachineShelf} test.
+ */
 public class VendingMachineShelfTest {
 
+    /**
+     * Default product container.
+     */
     private static final ProductContainer PRODUCT_CONTAINER =
         new ProductContainer(ProductContainerType.PACKET_BAR, "FFFFFF");
+    /**
+     * Default product type.
+     */
     private static final ProductType PRODUCT_TYPE = ProductType.AWESOME_CHOCOLATE_BAR;
 
+    /**
+     * Tested object.
+     */
     private VendingMachineShelf testedShelf;
 
+    /**
+     * Initializes tested object.
+     */
     @Before
     public void beforeTests() {
         this.testedShelf =
@@ -29,8 +44,11 @@ public class VendingMachineShelfTest {
     }
 
 
+    /**
+     * Tests methods adding products.
+     */
     @Test
-    public void testShelfSize() {
+    public void testProductAddition() {
         final Product product = Product.builder()
             .productContainer(PRODUCT_CONTAINER)
             .build();
@@ -39,6 +57,9 @@ public class VendingMachineShelfTest {
         assertThat(testedShelf.getProducts().size()).isEqualTo(4);
     }
 
+    /**
+     * Tests methods performing operations on products returned by the shelf via {@link VendingMachineShelf#getProducts()} method.
+     */
     @Test
     public void testShelfProductsModification() {
         final Product product = Product.builder()
