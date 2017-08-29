@@ -9,6 +9,7 @@
         <module>model</module>
         <module>common</module>
         <module>business-logic</module>
+        <module>ui</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -19,17 +20,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <jar.plugin.version>3.0.2</jar.plugin.version>
+        <shade.plugin.version>3.0.0</shade.plugin.version>
+        <exec.plugin.version>1.6.0</exec.plugin.version>
+        <jar.final.name>VendingMachineKata</jar.final.name>
+        <mainClass>tdd.vendingMachine.ui.main.JavaFXApplication</mainClass>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -72,8 +68,87 @@
             <artifactId>guava</artifactId>
             <version>11.0.2</version>
         </dependency>
-
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${jar.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>run</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>exec-maven-plugin</artifactId>
+                            <version>${exec.plugin.version}</version>
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>java</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <includeProjectDependencies>true</includeProjectDependencies>
+                                <mainClass>${mainClass}</mainClass>
+                                <commandlineArgs/>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${shade.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactSet>
+                                        <excludes>
+                                            <exclude>org.junit.*:*</exclude>
+                                            <exclude>junit:junit</exclude>
+                                            <exclude>org.hamcrest:hamcrest-core</exclude>
+                                            <exclude>org.mockito:mockito-all</exclude>
+                                        </excludes>
+                                    </artifactSet>
+                                    <transformers>
+                                        <transformer
+                                            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>${mainClass}</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <finalName>${jar.final.name}</finalName>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

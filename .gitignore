@@ -5,5 +5,8 @@
 # Java build files
 target/
 
-# Package Files #
+# Package Files
 *.jar
+
+# Maven Shade Plugin
+dependency-reduced-pom.xml
