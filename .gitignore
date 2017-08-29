@@ -10,3 +10,6 @@ target/
 
 # Maven Shade Plugin
 dependency-reduced-pom.xml
+
+# Logs
+logs/
