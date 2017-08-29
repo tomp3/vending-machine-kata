@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.model.product.Product;
-import tdd.vendingMachine.model.product.ProductContainer;
-import tdd.vendingMachine.model.product.ProductContainerType;
 import tdd.vendingMachine.model.product.ProductType;
 
 import java.math.BigDecimal;
@@ -27,13 +25,9 @@ public class ShelfServiceTest {
      */
     private static final ProductType DEFAULT_PRODUCT_TYPE = ProductType.CARBONATED_WATER_0_50_BOTTLE;
     /**
-     * Default product container.
-     */
-    private static final ProductContainer DEFAULT_PRODUCT_CONTAINER = new ProductContainer(ProductContainerType.BOTTLE_0_50, "FF33FF");
-    /**
      * Default product.
      */
-    private static final Product DEFAULT_PRODUCT = Product.builder().productContainer(DEFAULT_PRODUCT_CONTAINER).productType(DEFAULT_PRODUCT_TYPE).build();
+    private static final Product DEFAULT_PRODUCT = new Product(DEFAULT_PRODUCT_TYPE);
 
     /**
      * Tested object.
@@ -82,7 +76,7 @@ public class ShelfServiceTest {
         // dispense one product, verify it's not null
         assertThat(this.testedService.dispenseProduct(shelf)).isNotNull();
 
-        // verify products' amount
+        // verify products' count
         assertThat(shelf.getProducts()).hasSize(1);
 
         // dispense the second product

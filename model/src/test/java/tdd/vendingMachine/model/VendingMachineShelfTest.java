@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.model.product.Product;
-import tdd.vendingMachine.model.product.ProductContainer;
-import tdd.vendingMachine.model.product.ProductContainerType;
 import tdd.vendingMachine.model.product.ProductType;
 
 import java.math.BigDecimal;
@@ -20,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VendingMachineShelfTest {
 
     /**
-     * Default product container.
-     */
-    private static final ProductContainer PRODUCT_CONTAINER =
-        new ProductContainer(ProductContainerType.PACKET_BAR, "FFFFFF");
-    /**
      * Default product type.
      */
     private static final ProductType PRODUCT_TYPE = ProductType.AWESOME_CHOCOLATE_BAR;
+
+    /**
+     * Default product.
+     */
+    private static final Product PRODUCT = new Product(PRODUCT_TYPE);
 
     /**
      * Tested object.
@@ -49,10 +47,7 @@ public class VendingMachineShelfTest {
      */
     @Test
     public void testProductAddition() {
-        final Product product = Product.builder()
-            .productContainer(PRODUCT_CONTAINER)
-            .build();
-        IntStream.rangeClosed(1, 4).forEach((i) -> this.testedShelf.addProduct(product));
+        IntStream.rangeClosed(1, 4).forEach((i) -> this.testedShelf.addProduct(PRODUCT));
 
         assertThat(testedShelf.getProducts().size()).isEqualTo(4);
     }
@@ -62,11 +57,7 @@ public class VendingMachineShelfTest {
      */
     @Test
     public void testShelfProductsModification() {
-        final Product product = Product.builder()
-            .productContainer(PRODUCT_CONTAINER)
-            .productType(PRODUCT_TYPE)
-            .build();
-        IntStream.rangeClosed(1, 4).forEach((i) -> this.testedShelf.addProduct(product));
+        IntStream.rangeClosed(1, 4).forEach((i) -> this.testedShelf.addProduct(PRODUCT));
 
         Queue<Product> products = (Queue<Product>) this.testedShelf.getProducts();
         products.poll();
