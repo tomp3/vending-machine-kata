@@ -58,3 +58,5 @@ TP
 1. Machine could give the biggest amount of change possible, in case the user agreed not to be given the full change amount 
 (imagine that vending machine was the only source of drinking water in the area).
 2. Machine will not dispose products in case it's coin slots are full.
+3. Machine change algorithm could take vending machine coins amount into account to give change using the most common ones (according to some thresholds).
+4. Machine could set change thresholds for given coins according to the usage of machine (some self-learning algorithm to learn most common use-cases).
