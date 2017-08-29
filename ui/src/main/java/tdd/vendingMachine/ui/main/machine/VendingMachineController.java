@@ -8,4 +8,6 @@ public class VendingMachineController {
     @FXML
     private Label helloLabel;
 
+
+
 }
