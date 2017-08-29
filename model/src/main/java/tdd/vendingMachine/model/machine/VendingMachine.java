@@ -4,7 +4,8 @@ import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class VendingMachine {
+public class VendingMachine implements Serializable {
     /**
      * Vending machine cash.
      */
@@ -23,12 +24,21 @@ public class VendingMachine {
      */
     private Map<String, VendingMachineShelf> shelves = Maps.newHashMap();
 
-    public VendingMachine(VendingMachineCash cash) {
-        this.cash = cash;
-    }
+    /**
+     * Available shelves' codes.
+     */
+    private List<String> availableCodes;
 
-    public VendingMachine(VendingMachineCash cash, Map<String, VendingMachineShelf> shelves) {
-        this(cash);
+    /**
+     * Constructor assigning given vending machine cash, available shelves' codes and shelves.
+     *
+     * @param cash           vending machine cash.
+     * @param availableCodes available shelves' codes.
+     * @param shelves        shelves.
+     */
+    public VendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
+        this.cash = cash;
+        this.availableCodes = availableCodes;
         this.shelves = shelves;
     }
 }

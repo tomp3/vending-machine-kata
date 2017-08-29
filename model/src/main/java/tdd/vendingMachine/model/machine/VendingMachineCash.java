@@ -6,6 +6,7 @@ import lombok.Setter;
 import tdd.vendingMachine.common.number.NumberUtils;
 import tdd.vendingMachine.model.common.CoinType;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Vending machine cash representation.
  */
-public class VendingMachineCash {
+public class VendingMachineCash implements Serializable {
     /**
      * Coins map containing coins type as it's {@code key} and coins count as it's {@code value}.
      * Initially contains map with keys for all coin types with 0 as a {@code value}.
@@ -29,6 +30,11 @@ public class VendingMachineCash {
     @Setter
     private Map<CoinType, Integer> maxCoins;
 
+    /**
+     * Constructor assigning max coins values.
+     *
+     * @param maxCoins max coins values.
+     */
     public VendingMachineCash(Map<CoinType, Integer> maxCoins) {
         this.maxCoins = maxCoins;
     }

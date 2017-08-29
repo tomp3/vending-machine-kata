@@ -1,30 +1,26 @@
 package tdd.vendingMachine.model.product;
 
+import lombok.Getter;
+
+import java.io.Serializable;
+
 /**
- * Product interface.
- * Every product has it's productContainer and type.
+ * Product implementation.
  */
-public interface Product {
-    /**
-     * Returns product's type.
-     *
-     * @return product's type.
-     */
-    ProductType getProductType();
+public class Product implements Serializable {
 
     /**
-     * Returns product's container..
-     *
-     * @return product's container.
+     * Product type.
      */
-    ProductContainer getProductContainer();
+    @Getter
+    private final ProductType productType;
 
     /**
-     * Returns default product builder.
+     * Product constructor assigning product type.
      *
-     * @return default product builder.
+     * @param productType product type.
      */
-    static ProductBuilder builder() {
-        return new ProductBuilder();
+    public Product(ProductType productType) {
+        this.productType = productType;
     }
 }

@@ -14,9 +14,12 @@ import java.util.Map;
 /**
  * Default cash service implementation.
  */
-public class CashServiceImpl implements CashService {
+class CashServiceImpl implements CashService {
 
-    private CoinChangeService coinChangeService = CoinChangeService.newCoinChangeService();
+    /**
+     * Instance of service responsible for change calculations.
+     */
+    private final CoinChangeService coinChangeService = CoinChangeService.newCoinChangeService();
 
     /**
      * {@inheritDoc}
@@ -84,6 +87,16 @@ public class CashServiceImpl implements CashService {
         // decrease coins number in cash
         coins.forEach((k, v) -> cash.getCoins().put(k, cash.getCoins().get(k) - v));
         return coins;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public VendingMachineCash createCash(Map<CoinType, Integer> maxCoinCount, Map<CoinType, Integer> coins) {
+        VendingMachineCash cash = new VendingMachineCash(maxCoinCount);
+        insertCoins(cash, coins);
+        return cash;
     }
 
     /**

@@ -6,22 +6,29 @@ import java.math.RoundingMode;
 /**
  * Class with number util methods.
  */
-public class NumberUtils {
+public final class NumberUtils {
 
     /**
      * Default scale.
      */
-    public static final int SCALE_2 = 2;
+    private static final int SCALE_2 = 2;
     /**
      * Default rounding mode.
      */
-    public static final RoundingMode ROUND_HALF_UP = RoundingMode.HALF_UP;
-    private static final BigDecimal MULTIPLICATION_NEUTRAL = BigDecimal.ONE;
+    private static final RoundingMode ROUND_HALF_UP = RoundingMode.HALF_UP;
 
-
+    /**
+     * Big decimal 10 value.
+     */
     public static final BigDecimal BD_TEN = BigDecimal.valueOf(10);
+    /**
+     * Integer 0 value.
+     */
     public static final Integer INT_ZERO = 0;
 
+    /**
+     * Default private constructor.
+     */
     private NumberUtils() {
     }
 
@@ -87,10 +94,7 @@ public class NumberUtils {
      */
     public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, Integer scale, RoundingMode roundingMode) {
         if (dividend == null) {
-            throw new IllegalArgumentException("Dividend required.");
-        }
-        if (divisor == null) {
-            throw new IllegalArgumentException("Divisor required.");
+            throw new IllegalArgumentException("Both dividend and divisor are required.");
         }
         if (BigDecimal.ZERO.compareTo(divisor) == 0) {
             throw new IllegalArgumentException("Division by 0 is disallowed.");

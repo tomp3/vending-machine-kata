@@ -17,9 +17,17 @@ public enum ProductType {
     POTATO_CHIPS_0_200("Potato chips 0.200g"),
     PEANUTS_CAN_0_200("Peanuts 0.200g can");
 
+    /**
+     * Product type display name.
+     */
     @Getter
     private final String dispalyName;
 
+    /**
+     * Constructor assigning product type display name.
+     *
+     * @param displayName display name.
+     */
     ProductType(String displayName) {
         this.dispalyName = displayName;
     }
