@@ -1,4 +1,4 @@
-package tdd.vendingMachine.ui.main.machine;
+package tdd.vendingMachine.ui.machine;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

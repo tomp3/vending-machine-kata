@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
       xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="tdd.vendingMachine.ui.main.machine.VendingMachineController">
+      fx:controller="tdd.vendingMachine.ui.machine.VendingMachineController">
     <children>
         <Label fx:id="helloLabel" layoutX="113.0" layoutY="83.0" text="Hello world"/>
     </children>
