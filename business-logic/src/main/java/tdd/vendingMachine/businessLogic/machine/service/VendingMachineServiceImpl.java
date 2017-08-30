@@ -1,14 +1,19 @@
 package tdd.vendingMachine.businessLogic.machine.service;
 
+import com.google.common.collect.Maps;
+import org.apache.commons.collections4.CollectionUtils;
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
+import tdd.vendingMachine.common.number.NumberUtils;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
+import tdd.vendingMachine.model.product.ProductType;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Default {@link VendingMachineService} implementation.
@@ -29,11 +34,16 @@ class VendingMachineServiceImpl implements VendingMachineService {
     private static final String ALL_CODES_IN_USE_EXC_MSG = "All supported codes are already in use. Cannot add another shelf.";
 
     /**
+     * Not enough codes available exception message.
+     */
+    private static final String CODES_UNAVAILABLE_EXC_MSG = "Not enough codes available.";
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public VendingMachine createVendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
-        return new VendingMachine(cash, availableCodes, shelves);
+        return new VendingMachine(cash, availableCodes, shelves != null ? shelves : Maps.newHashMap());
     }
 
     /**
@@ -73,4 +83,5 @@ class VendingMachineServiceImpl implements VendingMachineService {
         return vendingMachine.getShelves().entrySet().stream().filter(e -> e.getValue() != null)
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
 }

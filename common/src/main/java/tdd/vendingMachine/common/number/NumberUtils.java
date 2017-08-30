@@ -2,6 +2,7 @@ package tdd.vendingMachine.common.number;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 
 /**
  * Class with number util methods.
@@ -25,6 +26,11 @@ public final class NumberUtils {
      * Integer 0 value.
      */
     public static final Integer INT_ZERO = 0;
+
+    /**
+     * {@link Random} instance.
+     */
+    private static final Random RANDOM = new Random();
 
     /**
      * Default private constructor.
@@ -114,5 +120,37 @@ public final class NumberUtils {
      */
     public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor) {
         return divide(dividend, divisor, SCALE_2, ROUND_HALF_UP);
+    }
+
+    /**
+     * Generates new random int of value between {@code min} (inclusive) and {@code max} (exclusive).
+     *
+     * @param min min value (inclusive).
+     * @param max max value (exclusive).
+     * @return random int of value between {@code min} (inclusive) and {@code max} (exclusive).
+     */
+    public static int getRandomInt(int min, int max) {
+        return min + RANDOM.nextInt((max - min));
+    }
+
+    /**
+     * Generates new random {@link BigDecimal} of value between {@code min} (inclusive) and {@code max} (inclusive).
+     * Returned object is scaled with the default scale ({@link #SCALE_2} using {@link #ROUND_HALF_UP} rounding mode.
+     *
+     * @param min min value (inclusive)
+     * @param max max value (inclusive).
+     * @return random {@link BigDecimal} of value between {@code min} (inclusive) and {@code max} (inclusive).
+     * Returned object is scaled with the default scale ({@link #SCALE_2} using {@link #ROUND_HALF_UP} rounding mode.
+     */
+    public static BigDecimal getRandomBigDecimalInclusive(BigDecimal min, BigDecimal max, int precision) {
+        BigDecimal precisionDecimals = BigDecimal.TEN.pow(precision - 1);
+        BigDecimal minPrec = min.multiply(precisionDecimals);
+        BigDecimal maxPrec = max.multiply(precisionDecimals);
+        BigDecimal range = maxPrec.subtract(minPrec).add(BigDecimal.ONE);
+
+        return BigDecimal.valueOf(RANDOM.nextDouble())
+            .multiply(range)
+            .subtract(precisionDecimals)
+            .divide(precisionDecimals, SCALE_2, ROUND_HALF_UP);
     }
 }

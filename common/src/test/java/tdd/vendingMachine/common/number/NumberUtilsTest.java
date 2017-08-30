@@ -30,7 +30,11 @@ public class NumberUtilsTest {
     }
 
     /**
-     * Tests division methods.
+     * Tests the following methods:
+     * <ul>
+     * <li>{@link NumberUtils#divide(BigDecimal, BigDecimal)}</li>
+     * <li>{@link NumberUtils#divide(BigDecimal, BigDecimal, Integer, RoundingMode)}</li>
+     * </ul>
      */
     @Test
     public void testBigDecimalDivision() {
@@ -39,5 +43,31 @@ public class NumberUtilsTest {
         assertThat(NumberUtils.divide(BigDecimal.valueOf(4.5), BigDecimal.valueOf(2))).isEqualTo(BigDecimal.valueOf(2.25));
         assertThat(NumberUtils.divide(BigDecimal.ONE, BigDecimal.valueOf(3), 3, RoundingMode.HALF_UP))
             .isEqualTo(BigDecimal.valueOf(0.333).setScale(3, RoundingMode.HALF_UP));
+    }
+
+    /**
+     * {@link NumberUtils#isZero(Integer)} test.
+     */
+    @Test
+    public void testIsZero() {
+        assertThat(NumberUtils.isZero(0));
+        assertThat(NumberUtils.isZero(2)).isFalse();
+    }
+
+    /**
+     * Tests {@link NumberUtils#getRandomInt(int, int)} method.
+     */
+    @Test
+    public void testGetRandomInt() {
+        assertThat(NumberUtils.getRandomInt(2, 7)).isLessThan(7).isGreaterThanOrEqualTo(2);
+    }
+
+    /**
+     * Tests {@link NumberUtils#getRandomBigDecimalInclusive(BigDecimal, BigDecimal, int)} } method.
+     */
+    @Test
+    public void testGetRandomBigDecimalInclusive() {
+        assertThat(NumberUtils.getRandomBigDecimalInclusive(BigDecimal.ONE.negate(), BigDecimal.valueOf(2), 4))
+            .isGreaterThanOrEqualTo(BigDecimal.ONE.negate()).isLessThanOrEqualTo(BigDecimal.valueOf(2));
     }
 }

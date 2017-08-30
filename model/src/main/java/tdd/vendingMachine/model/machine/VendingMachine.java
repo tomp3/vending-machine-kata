@@ -22,7 +22,7 @@ public class VendingMachine implements Serializable {
      * Vending machine shelves.
      * Shelves are stored as a map with shelf code as a {@code key} and shelf as a {@code value}.
      */
-    private Map<String, VendingMachineShelf> shelves = Maps.newHashMap();
+    private Map<String, VendingMachineShelf> shelves;
 
     /**
      * Available shelves' codes.

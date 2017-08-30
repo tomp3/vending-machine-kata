@@ -14,8 +14,9 @@ public final class GUIProperties extends PropertyManagerAbstr<GUIProperties.Prop
      */
     public enum PropertyKeys implements PropertyKey {
         MAIN_FXML_PATH("vending.machine.main.fxml", "Path to the main FXML.", true),
-        WINDOW_TITLE("window.title", "Application window title", false),
-        WINDOW_ICON("window.icon.path", "Application window icon", false);
+        WINDOW_TITLE("window.title", "Application window title."),
+        WINDOW_ICON("window.icon.path", "Application window icon."),
+        DISPLAY_DEFAULT_TEXT("display.default.text", "Default display text.");
 
         @Getter
         private final String key;

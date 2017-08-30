@@ -48,7 +48,7 @@ public interface VendingMachineService {
      * @param vendingMachine vending machine.
      * @param shelf          vending machine shelf.
      * @return code assigned to the given shelf.
-     * @throws UnavailableShelfCodeException exception thrown in case given code is unavailable (machine does not support such code).
+     * @throws UnavailableShelfCodeException exception thrown in case all supported codes are in use.
      */
     String addShelve(VendingMachine vendingMachine, VendingMachineShelf shelf) throws UnavailableShelfCodeException;
 

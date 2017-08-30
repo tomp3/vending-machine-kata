@@ -1,0 +1,31 @@
+.root {
+     -fx-background-color: linear-gradient(#666666, #333333, #666666);
+}
+
+.machine-btn {
+    -fx-max-height:Infinity;
+    -fx-max-width:Infinity;
+    -fx-background-color:linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.machine-btn:hover {
+    -fx-background-color: linear-gradient(#38424b 100%, #1f2429 80%, #191d22 0%);
+    -fx-text-fill: #999999;
+}
+
+.machine-btn:pressed {
+    -fx-max-height:Infinity;
+    -fx-max-width:Infinity;
+    -fx-background-color:linear-gradient(#38424b 0%, #1644A45 100%, #191d22 0%);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.machine-display {
+    -fx-fill: #818181;
+    -fx-background-color: #999999;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
