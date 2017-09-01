@@ -52,11 +52,28 @@ The assignment
 13. Machine can return change using only money that was put into it (or by someone at start or by people who bought goods). Machine cannot create it's own money!
 
 
-TP
----------------
+# TP
 
+
+## Suggestions
 1. Machine could give the biggest amount of change possible, in case the user agreed not to be given the full change amount 
 (imagine that vending machine was the only source of drinking water in the area).
 2. Machine will not dispose products in case it's coin slots are full.
 3. Machine change algorithm could take vending machine coins amount into account to give change using the most common ones (according to some thresholds).
 4. Machine could set change thresholds for given coins according to the usage of machine (some self-learning algorithm to learn most common use-cases).
+
+
+## Implementation
+Project is a JavaFX _enterprise-like_ implementation of Vending Machine.
+Besides requirements specified in **The assignment**, a few other requirements and constraints have been made:
+1. Machine has limited space for coins. When the limit is reached, machine displays the information and acts as if user pressed Cancel button.
+2. After having selected the code, user is obligated to accept the code pressing OK button.
+3. Shelves have limited space for products.
+
+Project has been created using multi-module Maven structure. Created modules:
+1. **common** - contains common, API-like objects and interfaces, e.g. basic `Converter` interface, `NumberUtils` class or `PropertyManager` (property reader/container util).
+2. **model** - containing POJOs representing data used in the project (`VendingMachine`, `Product`, `VendingMachineShelf` etc.).
+3. **business-logic** - contains business logic services operating on model objects (`CoinChangeService` for calculating the change, `VendingMachineService` for inserting coins, giving products etc.).
+4. **ui** - contains graphic user interface implementation (JavaFX), with UI event handlers (insert coin, select product) and invokes business logic methods to operate on model data.
+
+ 
