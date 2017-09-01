@@ -2,6 +2,9 @@ package tdd.vendingMachine.common.number;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Random;
 
 /**
@@ -31,6 +34,22 @@ public final class NumberUtils {
      * {@link Random} instance.
      */
     private static final Random RANDOM = new Random();
+
+    /**
+     * Number format.
+     */
+    private static final NumberFormat NUMBER_FORMAT;
+
+    /**
+     * Static initializer, initializes {@link #NUMBER_FORMAT}
+     * with decimal separator set to {@code '.'} and grouping separator {@code ' '}.
+     */
+    static {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        symbols.setGroupingSeparator(' ');
+        NUMBER_FORMAT = new DecimalFormat("#0.0;#0.0", symbols);
+    }
 
     /**
      * Default private constructor.
@@ -134,23 +153,9 @@ public final class NumberUtils {
     }
 
     /**
-     * Generates new random {@link BigDecimal} of value between {@code min} (inclusive) and {@code max} (inclusive).
-     * Returned object is scaled with the default scale ({@link #SCALE_2} using {@link #ROUND_HALF_UP} rounding mode.
-     *
-     * @param min min value (inclusive)
-     * @param max max value (inclusive).
-     * @return random {@link BigDecimal} of value between {@code min} (inclusive) and {@code max} (inclusive).
-     * Returned object is scaled with the default scale ({@link #SCALE_2} using {@link #ROUND_HALF_UP} rounding mode.
+     * Formats value to format defined as {@link #NUMBER_FORMAT}.
      */
-    public static BigDecimal getRandomBigDecimalInclusive(BigDecimal min, BigDecimal max, int precision) {
-        BigDecimal precisionDecimals = BigDecimal.TEN.pow(precision - 1);
-        BigDecimal minPrec = min.multiply(precisionDecimals);
-        BigDecimal maxPrec = max.multiply(precisionDecimals);
-        BigDecimal range = maxPrec.subtract(minPrec).add(BigDecimal.ONE);
-
-        return BigDecimal.valueOf(RANDOM.nextDouble())
-            .multiply(range)
-            .subtract(precisionDecimals)
-            .divide(precisionDecimals, SCALE_2, ROUND_HALF_UP);
+    public static String format(BigDecimal value) {
+        return NUMBER_FORMAT.format(value);
     }
 }

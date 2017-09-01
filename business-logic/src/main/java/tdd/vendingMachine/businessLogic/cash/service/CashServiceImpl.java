@@ -3,7 +3,8 @@ package tdd.vendingMachine.businessLogic.cash.service;
 
 import com.google.common.collect.Maps;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
-import tdd.vendingMachine.common.number.NumberUtils;
+import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
+import tdd.vendingMachine.common.currency.CurrencyUtils;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 
@@ -25,36 +26,45 @@ class CashServiceImpl implements CashService {
      * {@inheritDoc}
      */
     @Override
-    public Map<CoinType, Integer> insertCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) {
-        // map to be returned with coins left
-        Map<CoinType, Integer> coinsLeft = Maps.newHashMap(coins);
-        coins.forEach((k, v) -> coinsLeft.put(k, insertCoins(k, v, cash)));
-        return coinsLeft;
+    public void insertCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) throws CoinInsertionImpossibleException {
+        Map<CoinType, Integer> cashCoins = tryInsertCoins(cash, coins);
+        cash.getCoins().clear();
+        cash.getCoins().putAll(cashCoins);
+    }
+
+    /**
+     * Tries inserting coins. If successful, returns new coins to be stored by the cash.
+     * If unsuccessful, throws an exception.
+     *
+     * @param cash  vending machine cash.
+     * @param coins coins to be inserted.
+     * @return cash coins including inserted coins.
+     */
+    private Map<CoinType, Integer> tryInsertCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) throws CoinInsertionImpossibleException {
+        Map<CoinType, Integer> cashCoins = Maps.newHashMap(cash.getCoins());
+        for (Map.Entry<CoinType, Integer> entry : coins.entrySet()) {
+            cashCoins.put(entry.getKey(), insertCoins(entry.getKey(), entry.getValue(), cash));
+        }
+        return cashCoins;
     }
 
     /**
      * Insert given amount of coins of the given type.
-     * Returns amount of coins left after having inserted coins reaching the cash limit.
      *
      * @param coinType coin type.
      * @param count    amount of coins to be inserted.
      * @param cash     vending machine cash.
      * @return amount of coins left after having inserted coins reaching the cash limit.
      */
-    private int insertCoins(CoinType coinType, Integer count, VendingMachineCash cash) {
-        int coinsLeft = count;
+    private int insertCoins(CoinType coinType, Integer count, VendingMachineCash cash) throws CoinInsertionImpossibleException {
         int coinsCount = cash.getCoins().get(coinType);
         int maxCoinCount = cash.getMaxCoins().get(coinType);
         int freeCoinSlots = maxCoinCount - coinsCount;
         // any free coin slots exist
-        if (freeCoinSlots > NumberUtils.INT_ZERO) {
-            // amount of coins to be inserted
-            int coinsToInsert = count < freeCoinSlots ? count : freeCoinSlots;
-            // add coins to the cash
-            addCoins(cash, coinType, coinsToInsert);
-            coinsLeft -= coinsToInsert; // decrease left coins amount
+        if (freeCoinSlots < count) {
+            throw new CoinInsertionImpossibleException();
         }
-        return coinsLeft;
+        return coinsCount + count;
     }
 
     /**
@@ -72,8 +82,11 @@ class CashServiceImpl implements CashService {
      * {@inheritDoc}
      */
     @Override
-    public Map<CoinType, Integer> prepareChange(VendingMachineCash cash, BigDecimal price, BigDecimal payment) throws ChangeImpossibleException {
-        return coinChangeService.calculateChange(cash.getCoins(), price, payment);
+    public Map<CoinType, Integer> prepareChange(VendingMachineCash cash, BigDecimal price, BigDecimal payment)
+        throws ChangeImpossibleException {
+        Map<CoinType, Integer> coinsAvailable = Maps.newHashMap(cash.getCoins());
+        coinsAvailable.putAll(cash.getUserInsertedMoney());
+        return coinChangeService.calculateChange(coinsAvailable, price, payment);
     }
 
     /**
@@ -81,12 +94,15 @@ class CashServiceImpl implements CashService {
      */
     @Override
     public Map<CoinType, Integer> giveCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) {
-        if (cannotGiveCoins(cash, coins)) {
+        Map<CoinType, Integer> coinsToBeGiven = Maps.newHashMap(coins);
+        if (cannotGiveCoins(cash, coinsToBeGiven)) {
             return Collections.emptyMap();
         }
         // decrease coins number in cash
-        coins.forEach((k, v) -> cash.getCoins().put(k, cash.getCoins().get(k) - v));
-        return coins;
+        coinsToBeGiven.forEach((k, v) -> cash.getCoins().put(k, cash.getCoins().get(k) - v));
+        // clear concrete inserted money
+        cash.getUserInsertedMoney().clear();
+        return coinsToBeGiven;
     }
 
     /**
@@ -95,7 +111,7 @@ class CashServiceImpl implements CashService {
     @Override
     public VendingMachineCash createCash(Map<CoinType, Integer> maxCoinCount, Map<CoinType, Integer> coins) {
         VendingMachineCash cash = new VendingMachineCash(maxCoinCount);
-        insertCoins(cash, coins);
+        coins.forEach((k, v) -> addCoins(cash, k, v));
         return cash;
     }
 
@@ -114,5 +130,13 @@ class CashServiceImpl implements CashService {
             }
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getUserInsertedAmountSum(VendingMachineCash cash) {
+        return cash.getUserInsertedMoney().entrySet().stream().map(e -> CurrencyUtils.denormalizeCurrency(e.getKey().getValue() * e.getValue()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

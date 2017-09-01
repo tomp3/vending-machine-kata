@@ -18,9 +18,49 @@
 .machine-btn:pressed {
     -fx-max-height:Infinity;
     -fx-max-width:Infinity;
-    -fx-background-color:linear-gradient(#38424b 0%, #1644A45 100%, #191d22 0%);
+    -fx-background-color:linear-gradient(#38424b 0%, #1644A4 100%, #191d22 0%);
     -fx-text-fill: white;
     -fx-font-weight: bold;
+}
+
+#coin5.coin-btn {
+    -fx-background-color: #e67300;
+}
+#coin2.coin-btn {
+    -fx-background-color: #ffbf00;
+}
+#coin1.coin-btn {
+    -fx-background-color: #a6a6a6;
+}
+#coin0_5.coin-btn {
+    -fx-background-color: #ff9900;
+}
+#coin0_2.coin-btn {
+    -fx-background-color: #ffa31a;
+}
+#coin0_1.coin-btn {
+    -fx-background-color: #ffb84d;
+}
+
+.coin-btn {
+    -fx-max-height:Infinity;
+    -fx-max-width:Infinity;
+    -fx-background-radius: 50%;
+    -fx-text-fill: white;
+}
+
+.coin-btn:hover {
+    -fx-background-color: linear-gradient(white, #ff6600);
+    -fx-text-fill: #ff0080;
+}
+
+.coin-btn:pressed {
+    -fx-background-color: #ffa366;
+    -fx-border-radius: 50%;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+    -fx-border-style: dotted;
+    -fx-text-fill: #ff0080;
 }
 
 .machine-display {
@@ -28,4 +68,25 @@
     -fx-background-color: #999999;
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
+}
+
+.machine-display:disabled {
+    -fx-opacity: 1.0;
+}
+
+.shelf-code {
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-background-color: #cccccc;
+}
+
+.tray {
+    -fx-max-height:Infinity;
+    -fx-max-width:Infinity;
+    -fx-background-color: linear-gradient(#e6e6e6, #ffa64d);
+}
+.tray:disabled {
+    -fx-opacity: 1.0;
+    -fx-background-color: linear-gradient(#e6e6e6, #ffa64d);
 }

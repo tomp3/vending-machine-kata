@@ -1,17 +1,15 @@
-package tdd.vendingMachine.businessLogic.machine.actions;
+package tdd.vendingMachine.ui.machine.handlers;
 
 /**
  * Class responsible for vending machine actions' handling.
  *
  * @param <K> handler return type.
- * @param <T> vending machine action type.
  */
-public interface VendingMachineActionHandler<T, K> {
+public interface VendingMachineActionHandler<K> {
     /**
      * Handles vending machine action.
      *
-     * @param action vending machine action.
      * @return result of vending machine action handling.
      */
-    K handle(T action);
+    K handle();
 }

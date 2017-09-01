@@ -26,11 +26,11 @@ public class VendingMachineContext implements Serializable {
      */
     private VendingMachine vendingMachine = null;
     /**
-     * Coins inserted by the user.
+     * Coins inserted by the concrete.
      */
     private Map<CoinType, Integer> userCoinsInserted = Maps.newHashMap();
     /**
-     * Message currently displayed to the user.
+     * Message currently displayed to the concrete.
      */
     private String displayedMessage = null;
 

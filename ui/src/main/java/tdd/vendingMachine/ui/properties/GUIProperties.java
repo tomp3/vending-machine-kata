@@ -16,7 +16,9 @@ public final class GUIProperties extends PropertyManagerAbstr<GUIProperties.Prop
         MAIN_FXML_PATH("vending.machine.main.fxml", "Path to the main FXML.", true),
         WINDOW_TITLE("window.title", "Application window title."),
         WINDOW_ICON("window.icon.path", "Application window icon."),
-        DISPLAY_DEFAULT_TEXT("display.default.text", "Default display text.");
+        DISPLAY_INSERT_COINS_TEXT("display.insert.coins.text", "Display insert coins text."),
+        COMPONENT_CODE_TEXT_CLASS("component.code.text.class", "Code text filed css class."),
+        EMPTY_SHELF_COLOR("component.empty.shelf.color", "Emtpy shelf color");
 
         @Getter
         private final String key;

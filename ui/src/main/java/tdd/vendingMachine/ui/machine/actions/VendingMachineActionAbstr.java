@@ -1,8 +1,8 @@
-package tdd.vendingMachine.businessLogic.machine.actions;
+package tdd.vendingMachine.ui.machine.actions;
 
 /**
  * Abstract implementation of vending machine action.
- * Implements {@link VendingMachineAction#getActionParameters()} method
+ * Implements {@link VendingMachineAction#getVendingMachineActionParameters()} method
  * enforcing passing parameters to the constructor be extending classes.
  *
  * @param <T> parameters class.
@@ -12,14 +12,14 @@ public abstract class VendingMachineActionAbstr<T> implements VendingMachineActi
     /**
      * Action parameters.
      */
-    private final T actionParameters;
+    private final VendingMachineActionParameters<T> actionParameters;
 
     /**
      * Constructor assigning action parameters.
      *
      * @param actionParameters action parameters.
      */
-    public VendingMachineActionAbstr(T actionParameters) {
+    public VendingMachineActionAbstr(VendingMachineActionParameters<T> actionParameters) {
         this.actionParameters = actionParameters;
     }
 
@@ -27,7 +27,7 @@ public abstract class VendingMachineActionAbstr<T> implements VendingMachineActi
      * {@inheritDoc}
      */
     @Override
-    public T getActionParameters() {
+    public VendingMachineActionParameters<T> getVendingMachineActionParameters() {
         return actionParameters;
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.assertj.core.data.MapEntry;
 import org.junit.Test;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
+import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 
@@ -50,7 +51,7 @@ public class CashServiceTest {
      * Method testing methods inserting coins to the cash.
      */
     @Test
-    public void testInsertCoins() {
+    public void testInsertCoins() throws CoinInsertionImpossibleException {
         VendingMachineCash cash = new VendingMachineCash(MAX_COIN_COUNT);
         ImmutableMap<CoinType, Integer> coins = ImmutableMap.<CoinType, Integer>builder()
             .put(CoinType.POINT_ONE, 200)
@@ -60,12 +61,16 @@ public class CashServiceTest {
             .put(CoinType.TWO, 200)
             .put(CoinType.FIVE, 200)
             .build();
-        Map<CoinType, Integer> coinsLeft = testedService.insertCoins(cash, coins);
-        assertThat(coinsLeft).contains(
-            MapEntry.entry(CoinType.POINT_ONE, 0), MapEntry.entry(CoinType.POINT_TWO, 0),
-            MapEntry.entry(CoinType.POINT_FIVE, 30), MapEntry.entry(CoinType.ONE, 50),
-            MapEntry.entry(CoinType.TWO, 50), MapEntry.entry(CoinType.FIVE, 100)
-        );
+        assertThatThrownBy(() -> testedService.insertCoins(cash, coins));
+        ImmutableMap<CoinType, Integer> insertCoins = ImmutableMap.<CoinType, Integer>builder()
+            .put(CoinType.POINT_ONE, 200)
+            .put(CoinType.POINT_TWO, 200)
+            .put(CoinType.POINT_FIVE, 170)
+            .put(CoinType.ONE, 150)
+            .put(CoinType.TWO, 150)
+            .put(CoinType.FIVE, 100)
+            .build();
+        testedService.insertCoins(cash, insertCoins);
         assertThat(cash.getCoins()).contains(
             MapEntry.entry(CoinType.POINT_ONE, 200), MapEntry.entry(CoinType.POINT_TWO, 200),
             MapEntry.entry(CoinType.POINT_FIVE, 170), MapEntry.entry(CoinType.ONE, 150),
@@ -77,7 +82,7 @@ public class CashServiceTest {
      * Method testing methods responsible for calculating the change.
      */
     @Test
-    public void testPrepareChange() {
+    public void testPrepareChange() throws CoinInsertionImpossibleException {
         VendingMachineCash cash = new VendingMachineCash(MAX_COIN_COUNT);
         testedService.insertCoins(cash, DEFAULT_COINS);
 
@@ -95,7 +100,7 @@ public class CashServiceTest {
      * Method testing methods giving / disposing coins.
      */
     @Test
-    public void testGiveCoins() {
+    public void testGiveCoins() throws CoinInsertionImpossibleException {
         VendingMachineCash cash = new VendingMachineCash(MAX_COIN_COUNT);
         testedService.insertCoins(cash, DEFAULT_COINS);
 
@@ -136,5 +141,16 @@ public class CashServiceTest {
             MapEntry.entry(CoinType.TWO, 150),
             MapEntry.entry(CoinType.FIVE, 100)
         );
+    }
+
+    /**
+     * {@link CashService#getUserInsertedAmountSum(VendingMachineCash)} test.
+     */
+    @Test
+    public void testGetUserInsertedAmountSum() {
+        VendingMachineCash cash = testedService.createCash(MAX_COIN_COUNT, DEFAULT_COINS);
+        cash.getUserInsertedMoney().putAll(ImmutableMap.of(CoinType.POINT_ONE, 5, CoinType.POINT_FIVE, 1));
+        BigDecimal insertedAmount = testedService.getUserInsertedAmountSum(cash);
+        assertThat(insertedAmount).isEqualByComparingTo(BigDecimal.ONE);
     }
 }

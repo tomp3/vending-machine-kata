@@ -6,16 +6,20 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.common.number.NumberUtils;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
+import tdd.vendingMachine.model.product.Product;
 import tdd.vendingMachine.model.product.ProductType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Default vending machine generator.
@@ -72,6 +76,8 @@ public class DefaultVendingMachineGenerator implements VendingMachineGenerator {
      */
     private VendingMachineService service = VendingMachineService.newVendingMachineService();
 
+    private ShelfService shelfService = ShelfService.newShelfService();
+
     /**
      * Generates {@link VendingMachine} instance.
      *
@@ -79,7 +85,10 @@ public class DefaultVendingMachineGenerator implements VendingMachineGenerator {
      */
     public VendingMachine generate() {
         Map<String, VendingMachineShelf> shelves = createShelves();
-        return service.createVendingMachine(createCash(), shelves.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()), shelves);
+        VendingMachine vendingMachine =
+            service.createVendingMachine(createCash(), shelves.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toList()), shelves);
+        insertProducts(vendingMachine);
+        return vendingMachine;
     }
 
     /**
@@ -109,6 +118,29 @@ public class DefaultVendingMachineGenerator implements VendingMachineGenerator {
     }
 
     /**
+     * Inserts random amount of products to vending machine shelves.
+     */
+    private void insertProducts(VendingMachine vendingMachine) {
+        vendingMachine.getShelves().forEach((k, v) -> {
+            int productCount = getRandomProductCount(v);
+            if (productCount > 0) {
+                Product product = new Product(v.getProductType());
+                shelfService.insertProducts(v, IntStream.range(0, productCount).mapToObj((i) -> product).collect(Collectors.toList()));
+            }
+        });
+    }
+
+    /**
+     * Gets random product count for the given shelf - min value is 0, max is shelf size.
+     *
+     * @param shelf shelf.
+     * @return random product count for the given shelf - min value is 0, max is shelf size.
+     */
+    private int getRandomProductCount(VendingMachineShelf shelf) {
+        return NumberUtils.getRandomInt(0, shelf.getSize() + 1);
+    }
+
+    /**
      * Gets random product price within the given range (both {@code min} and {@code max} inclusive).
      *
      * @param min min price (inclusive).
@@ -116,6 +148,7 @@ public class DefaultVendingMachineGenerator implements VendingMachineGenerator {
      * @return random product price within the given range (both {@code min} and {@code max} inclusive).
      */
     private BigDecimal getRandomProductPrice(BigDecimal min, BigDecimal max) {
-        return NumberUtils.getRandomBigDecimalInclusive(min, max, 4);
+        int randomInt = NumberUtils.getRandomInt(NumberUtils.multiply(min, BigDecimal.TEN).intValue(), NumberUtils.multiply(max, BigDecimal.TEN).intValue());
+        return NumberUtils.divide(BigDecimal.valueOf(randomInt), BigDecimal.TEN, 1, RoundingMode.HALF_UP);
     }
 }

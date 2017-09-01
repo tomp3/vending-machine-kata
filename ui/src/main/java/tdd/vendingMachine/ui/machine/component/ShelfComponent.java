@@ -1,25 +1,42 @@
 package tdd.vendingMachine.ui.machine.component;
 
-import javafx.geometry.Pos;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import lombok.Getter;
+import tdd.vendingMachine.model.machine.VendingMachineShelf;
+import tdd.vendingMachine.ui.properties.GUIProperties;
 
 public class ShelfComponent extends GridPane {
 
-    private StackPane productContainerPane;
-    private Pane productContainer;
-    private TextArea nameTextArea;
-    private TextField codeTextField;
+    private static final GUIProperties GUI_PROPERTIES = GUIProperties.getInstance();
+    private static final String EMPTY_SHELF_COLOR = GUI_PROPERTIES.getProperty(GUIProperties.PropertyKeys.EMPTY_SHELF_COLOR);
+    private static final Background EMPTY_SHELF_BACKGROUND = new Background(new BackgroundFill(Color.valueOf(EMPTY_SHELF_COLOR), null, null));
 
-    public ShelfComponent(String code, String productName, String containerColor) {
+    @Getter
+    private StackPane productContainerPane;
+    @Getter
+    private Pane productContainer;
+    @Getter
+    private TextArea nameTextArea;
+    @Getter
+    private TextField codeTextField;
+    @Getter
+    private ObjectProperty<Background> backgroundProperty;
+
+    public ShelfComponent(String code, String productName, String containerColor, VendingMachineShelf shelf) {
         super();
         setSize(this);
-        this.productContainer = createProductContainer(containerColor);
+        this.backgroundProperty = new SimpleObjectProperty<>(shelf.getProducts().isEmpty() ?
+            EMPTY_SHELF_BACKGROUND :
+            new Background(new BackgroundFill(Color.valueOf(containerColor), null, null))
+        );
+        this.productContainer = createProductContainer(backgroundProperty);
         this.nameTextArea = createNameTextArea(productName);
         this.codeTextField = createCodeTextField(code);
         this.productContainerPane = createStackPane(productContainer, nameTextArea);
@@ -29,12 +46,12 @@ public class ShelfComponent extends GridPane {
     }
 
     private TextField createCodeTextField(String code) {
-        TextField tf = new TextField();
-        setSize(tf);
-        tf.setText(code);
-        tf.setDisable(true);
-        tf.setAlignment(Pos.CENTER);
-        return tf;
+        TextField textField = new TextField();
+        setSize(textField);
+        textField.setText(code);
+        textField.setDisable(true);
+        textField.getStyleClass().add(GUI_PROPERTIES.getProperty(GUIProperties.PropertyKeys.COMPONENT_CODE_TEXT_CLASS));
+        return textField;
     }
 
     private TextArea createNameTextArea(String name) {
@@ -47,10 +64,10 @@ public class ShelfComponent extends GridPane {
         return ta;
     }
 
-    private Pane createProductContainer(String containerColor) {
+    private Pane createProductContainer(ObservableObjectValue<Background> backgroundProperty) {
         Pane pane = new Pane();
         setSize(pane);
-        pane.setStyle(String.format("-fx-background-color:#%s;", containerColor));
+        pane.backgroundProperty().bind(backgroundProperty);
         return pane;
     }
 

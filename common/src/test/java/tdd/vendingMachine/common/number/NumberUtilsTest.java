@@ -63,11 +63,11 @@ public class NumberUtilsTest {
     }
 
     /**
-     * Tests {@link NumberUtils#getRandomBigDecimalInclusive(BigDecimal, BigDecimal, int)} } method.
+     * Tests {@link NumberUtils#format(BigDecimal)} method.
      */
     @Test
-    public void testGetRandomBigDecimalInclusive() {
-        assertThat(NumberUtils.getRandomBigDecimalInclusive(BigDecimal.ONE.negate(), BigDecimal.valueOf(2), 4))
-            .isGreaterThanOrEqualTo(BigDecimal.ONE.negate()).isLessThanOrEqualTo(BigDecimal.valueOf(2));
+    public void testFormat(){
+        assertThat(NumberUtils.format(BigDecimal.ONE)).isEqualTo("1.0");
+        assertThat(NumberUtils.format(BigDecimal.valueOf(23.15))).isEqualTo("23.2");
     }
 }

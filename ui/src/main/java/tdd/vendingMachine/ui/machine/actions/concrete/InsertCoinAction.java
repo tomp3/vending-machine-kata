@@ -1,8 +1,9 @@
-package tdd.vendingMachine.businessLogic.machine.actions.user;
+package tdd.vendingMachine.ui.machine.actions.concrete;
 
-import tdd.vendingMachine.businessLogic.machine.actions.VendingMachineActionAbstr;
-import tdd.vendingMachine.businessLogic.machine.actions.VendingMachineActionType;
 import tdd.vendingMachine.model.common.CoinType;
+import tdd.vendingMachine.ui.machine.actions.VendingMachineActionAbstr;
+import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
+import tdd.vendingMachine.ui.machine.actions.VendingMachineActionType;
 
 /**
  * Action of coin insertion.
@@ -14,7 +15,7 @@ public class InsertCoinAction extends VendingMachineActionAbstr<CoinType> {
      *
      * @param actionParameters action parameters.
      */
-    public InsertCoinAction(CoinType actionParameters) {
+    public InsertCoinAction(VendingMachineActionParameters<CoinType> actionParameters) {
         super(actionParameters);
     }
 
@@ -23,6 +24,6 @@ public class InsertCoinAction extends VendingMachineActionAbstr<CoinType> {
      */
     @Override
     public VendingMachineActionType getActionType() {
-        return null;
+        return VendingMachineActionType.INSERT_COIN;
     }
 }

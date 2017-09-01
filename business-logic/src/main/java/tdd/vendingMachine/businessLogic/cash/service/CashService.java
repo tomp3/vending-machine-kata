@@ -1,6 +1,7 @@
 package tdd.vendingMachine.businessLogic.cash.service;
 
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
+import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 
@@ -23,13 +24,12 @@ public interface CashService {
 
     /**
      * Inserts coins into the cash as long as cash has free slots for given coin types.
-     * Returns all coins which could not be inserted in the cash due to all coin slots being filled.
      *
      * @param cash  vending machine cash.
      * @param coins coins to be inserted.
-     * @return coins which could not be inserted in the cash due to all coin slots being filled.
+     * @throws CoinInsertionImpossibleException thrown in case all coin slots are taken.
      */
-    Map<CoinType, Integer> insertCoins(VendingMachineCash cash, Map<CoinType, Integer> coins);
+    void insertCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) throws CoinInsertionImpossibleException;
 
     /**
      * Prepares change for the product of the given price with the given payment amount.
@@ -40,7 +40,8 @@ public interface CashService {
      * @return map representation of change - coin type and their counts.
      * @throws ChangeImpossibleException exception in case there is no possible change combination for the given parameters.
      */
-    Map<CoinType, Integer> prepareChange(VendingMachineCash cash, BigDecimal price, BigDecimal payment) throws ChangeImpossibleException;
+    Map<CoinType, Integer> prepareChange(VendingMachineCash cash, BigDecimal price, BigDecimal payment)
+        throws ChangeImpossibleException;
 
     /**
      * Disposes given coins from given vending machine cash.
@@ -60,4 +61,12 @@ public interface CashService {
      * @return vending machine cash instance.
      */
     VendingMachineCash createCash(Map<CoinType, Integer> maxCoinCount, Map<CoinType, Integer> coins);
+
+    /**
+     * Returns concrete inserted amount sum in form of {@link BigDecimal}.
+     *
+     * @param cash vending machine cash.
+     * @return concrete inserted amount sum in form of {@link BigDecimal}.
+     */
+    BigDecimal getUserInsertedAmountSum(VendingMachineCash cash);
 }

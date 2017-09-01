@@ -1,6 +1,5 @@
 package tdd.vendingMachine.model.machine;
 
-import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +29,16 @@ public class VendingMachine implements Serializable {
     private List<String> availableCodes;
 
     /**
+     * Vending machine cash tray.
+     */
+    private final VendingMachineCashTray cashTray;
+
+    /**
+     * Vending machine product tray.
+     */
+    private final VendingMachineProductTray productTray;
+
+    /**
      * Constructor assigning given vending machine cash, available shelves' codes and shelves.
      *
      * @param cash           vending machine cash.
@@ -40,5 +49,7 @@ public class VendingMachine implements Serializable {
         this.cash = cash;
         this.availableCodes = availableCodes;
         this.shelves = shelves;
+        this.cashTray = new VendingMachineCashTray();
+        this.productTray = new VendingMachineProductTray();
     }
 }

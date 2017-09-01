@@ -8,7 +8,6 @@ import tdd.vendingMachine.model.common.CoinType;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,12 +30,19 @@ public class VendingMachineCash implements Serializable {
     private Map<CoinType, Integer> maxCoins;
 
     /**
+     * Money inserted by the concrete.
+     */
+    @Getter
+    private final Map<CoinType, Integer> userInsertedMoney;
+
+    /**
      * Constructor assigning max coins values.
      *
      * @param maxCoins max coins values.
      */
     public VendingMachineCash(Map<CoinType, Integer> maxCoins) {
         this.maxCoins = maxCoins;
+        this.userInsertedMoney = Maps.newHashMap();
     }
 
 
@@ -46,7 +52,7 @@ public class VendingMachineCash implements Serializable {
      * @return coins map with keys for all coin types with 0 as a {@code value}.
      */
     private Map<CoinType, Integer> prepareCoinsMap() {
-        HashMap<CoinType, Integer> coinsMap = Maps.newHashMap();
+        Map<CoinType, Integer> coinsMap = Maps.newHashMap();
         Arrays.stream(CoinType.values()).forEach(ct -> coinsMap.put(ct, NumberUtils.INT_ZERO));
         return coinsMap;
     }

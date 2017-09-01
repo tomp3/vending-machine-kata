@@ -1,19 +1,27 @@
 package tdd.vendingMachine.businessLogic.machine.service;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
+import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.machine.exception.ProductUnavailableException;
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
-import tdd.vendingMachine.common.number.NumberUtils;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
+import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
-import tdd.vendingMachine.model.product.ProductType;
+import tdd.vendingMachine.model.product.Product;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Default {@link VendingMachineService} implementation.
@@ -34,9 +42,19 @@ class VendingMachineServiceImpl implements VendingMachineService {
     private static final String ALL_CODES_IN_USE_EXC_MSG = "All supported codes are already in use. Cannot add another shelf.";
 
     /**
-     * Not enough codes available exception message.
+     * Specified product unavailable exception message.
      */
-    private static final String CODES_UNAVAILABLE_EXC_MSG = "Not enough codes available.";
+    private static final String SPECIFIED_PRODUCT_UNAVAILABLE_EXC_MSG = "Specified product unavailable (code: %s)";
+
+    /**
+     * Shelf service.
+     */
+    private final ShelfService shelfService = ShelfService.newShelfService();
+
+    /**
+     * Cash service.
+     */
+    private final CashService cashService = CashService.newCashService();
 
     /**
      * {@inheritDoc}
@@ -83,5 +101,103 @@ class VendingMachineServiceImpl implements VendingMachineService {
         return vendingMachine.getShelves().entrySet().stream().filter(e -> e.getValue() != null)
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
+    /**
+     * Dispenses VendingMachine product stored on the shelf of the given code.
+     *
+     * @param vendingMachine vending machine.
+     * @param code           product code.
+     * @return dispensed product.
+     * @throws ProductUnavailableException thrown in case product is unavailable (e.g. empty shelf).
+     */
+    private Product dispenseProduct(VendingMachine vendingMachine, String code) throws ProductUnavailableException {
+        if (BooleanUtils.isFalse(vendingMachine.getAvailableCodes().contains(code))) {
+            throw new ProductUnavailableException(String.format(SPECIFIED_PRODUCT_UNAVAILABLE_EXC_MSG, code),
+                new UnavailableShelfCodeException(String.format(CODE_NOT_SUPPORTED_EXC_MSG, code)));
+        }
+        if (BooleanUtils.isFalse(isProductAvailable(vendingMachine, code))) {
+            throw new ProductUnavailableException(String.format(SPECIFIED_PRODUCT_UNAVAILABLE_EXC_MSG, code));
+        }
+        return shelfService.dispenseProduct(vendingMachine.getShelves().get(code));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isProductAvailable(VendingMachine vendingMachine, String code) {
+        return vendingMachine.getAvailableCodes().contains(code) &&
+            vendingMachine.getShelves().get(code).peekProduct().isPresent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insertUserCoin(VendingMachine vendingMachine, CoinType coin) throws CoinInsertionImpossibleException {
+        VendingMachineCash cash = vendingMachine.getCash();
+        Integer coinCount = cash.getUserInsertedMoney().get(coin);
+        coinCount = coinCount == null ? 1 : coinCount + 1;
+        cash.getUserInsertedMoney().put(coin, coinCount);
+        cashService.insertCoins(cash, Collections.singletonMap(coin, 1));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getInsertedMoneyAmount(VendingMachine vendingMachine) {
+        return cashService.getUserInsertedAmountSum(vendingMachine.getCash());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Pair<Product, Map<CoinType, Integer>> giveProduct(VendingMachine vendingMachine, String code)
+        throws ChangeImpossibleException, ProductUnavailableException {
+        BigDecimal userInsertedAmount = cashService.getUserInsertedAmountSum(vendingMachine.getCash());
+        VendingMachineShelf shelf = vendingMachine.getShelves().get(code);
+        BigDecimal productPrice = shelf.getProductPrice();
+        Map<CoinType, Integer> preparedChange = cashService.prepareChange(vendingMachine.getCash(), productPrice, userInsertedAmount);
+        Map<CoinType, Integer> change = cashService.giveCoins(vendingMachine.getCash(), preparedChange);
+        Product product = dispenseProduct(vendingMachine, code);
+
+
+        // Add change to cash tray.
+        addToCashTray(vendingMachine, change);
+        // Add product to product tray.
+        vendingMachine.getProductTray().getProducts().add(product);
+
+
+        return ImmutablePair.of(product, change);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<CoinType, Integer> returnUserMoney(VendingMachine vendingMachine) {
+        Map<CoinType, Integer> userMoney = vendingMachine.getCash().getUserInsertedMoney();
+        Map<CoinType, Integer> userCoins = cashService.giveCoins(vendingMachine.getCash(), userMoney);
+        addToCashTray(vendingMachine, userCoins);
+        return userCoins;
+    }
+
+    /**
+     * Adds coins to vending machine cash tray.
+     *
+     * @param vendingMachine vending machine.
+     * @param coins          coins to be added to the cash tray.
+     */
+    private void addToCashTray(VendingMachine vendingMachine, Map<CoinType, Integer> coins) {
+        coins.forEach((k, v) -> {
+            Map<CoinType, Integer> tray = vendingMachine.getCashTray().getCoins();
+            Integer count = tray.get(k);
+            count = count == null ? v : count + v;
+            tray.put(k, count);
+        });
+    }
+
 
 }
