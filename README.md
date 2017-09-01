@@ -76,4 +76,4 @@ Project has been created using multi-module Maven structure. Created modules:
 3. **business-logic** - contains business logic services operating on model objects (`CoinChangeService` for calculating the change, `VendingMachineService` for inserting coins, giving products etc.).
 4. **ui** - contains graphic user interface implementation (JavaFX), with UI event handlers (insert coin, select product) and invokes business logic methods to operate on model data.
 
- 
+To run the project, just execute `mvn clean package` target.
