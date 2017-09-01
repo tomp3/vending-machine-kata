@@ -32,6 +32,9 @@ public class CancelActionHandler implements VendingMachineActionHandler<Void> {
         this.vendingMachineService = VendingMachineService.newVendingMachineService();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Void handle() {
         VendingMachineViewModel vendingMachineView = action.getVendingMachineActionParameters().getVendingMachine();

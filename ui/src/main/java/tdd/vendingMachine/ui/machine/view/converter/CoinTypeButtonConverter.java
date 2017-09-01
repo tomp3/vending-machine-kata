@@ -11,11 +11,6 @@ import java.util.Map;
  */
 public final class CoinTypeButtonConverter {
 
-    /**
-     * Default constructor.
-     */
-    private CoinTypeButtonConverter() {
-    }
 
     /**
      * Map used for converting button text to coin type.
@@ -47,6 +42,12 @@ public final class CoinTypeButtonConverter {
         INVERTED_COIN_BUTTON_TYPE_MAP::get,
         COIN_BUTTON_TYPE_MAP::get
     );
+
+    /**
+     * Default constructor.
+     */
+    private CoinTypeButtonConverter() {
+    }
 
     /**
      * Converts coin type to button text.

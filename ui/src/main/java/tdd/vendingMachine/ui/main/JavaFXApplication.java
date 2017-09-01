@@ -16,6 +16,9 @@ import java.io.IOException;
  */
 public class JavaFXApplication extends Application {
 
+    /**
+     * GUIProperties instance.
+     */
     private static final GUIProperties GUI_PROPERTIES = GUIProperties.getInstance();
 
     /**

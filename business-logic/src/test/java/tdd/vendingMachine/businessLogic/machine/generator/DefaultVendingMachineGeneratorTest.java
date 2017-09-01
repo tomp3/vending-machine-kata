@@ -13,7 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class DefaultVendingMachineGeneratorTest {
 
-    VendingMachineGenerator generator = new DefaultVendingMachineGenerator();
+    /**
+     * Tested object.
+     */
+    private VendingMachineGenerator generator = new DefaultVendingMachineGenerator();
 
     /**
      * Tests {@link DefaultVendingMachineGenerator#generate()} method.

@@ -1,27 +1,23 @@
 package tdd.vendingMachine.ui.machine;
 
-import com.google.common.collect.Maps;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import lombok.Getter;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.ui.machine.component.ShelfComponent;
 
 import java.util.Map;
 
+/**
+ * Shelves' grid pain manager.
+ * Adds specific shelves to the pane according to received {@link VendingMachineShelf shelves} and their {@link String codes}.
+ */
 public class ShelvesPaneManager {
 
-    private static final int MAX_ROW_SIZE = 5;
-
     /**
-     * Map containing vending machine shelf objects and shelf UI components stored
-     * by the shelf code.
+     * Maximum row size of the pane.
      */
-    @Getter
-    private Map<String, Pair<VendingMachineShelf, ShelfComponent>> shelfComponents = Maps.newHashMap();
+    private static final int MAX_ROW_SIZE = 5;
 
     /**
      * Adds given shelves in form of JavaFX components to the given {@link GridPane shelvesPane}.
@@ -38,16 +34,27 @@ public class ShelvesPaneManager {
                 rowIdx.increment();
             }
             ShelfComponent shelfComponent = createShelf(key, value);
-            shelfComponents.put(key, MutablePair.of(value, shelfComponent));
             shelvesPane.add(shelfComponent, colIdx.getAndIncrement(), rowIdx.getValue());
         });
         setRowAndColConstraints(shelvesPane);
     }
 
+    /**
+     * Creates shelf component.
+     *
+     * @param code  code.
+     * @param shelf shelf.
+     * @return shelf component.
+     */
     private ShelfComponent createShelf(String code, VendingMachineShelf shelf) {
         return new ShelfComponent(code, shelf.getProductType().getDispalyName(), shelf.getProductType().getContainerColor(), shelf);
     }
 
+    /**
+     * Sets default row and column constrains of the pane.
+     *
+     * @param shelvesPane shelves pane.
+     */
     private void setRowAndColConstraints(GridPane shelvesPane) {
         shelvesPane.getRowConstraints().forEach(r -> {
             r.setFillHeight(true);

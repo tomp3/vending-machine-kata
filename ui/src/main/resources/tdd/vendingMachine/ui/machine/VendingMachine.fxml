@@ -11,7 +11,7 @@
                layoutX="500.0" layoutY="28.0" prefHeight="51.0" prefWidth="192.0"
                fx:id="displayLabel"/>
         <GridPane fx:id="shelvesPane" layoutX="14.0" layoutY="28.0" prefHeight="312.0" prefWidth="400.0"/>
-        <GridPane fx:id="productTray" layoutX="14.0" layoutY="500.0" prefWidth="400.0">
+        <GridPane layoutX="14.0" layoutY="500.0" prefWidth="400.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="312.0" percentWidth="100"/>
             </columnConstraints>
@@ -21,7 +21,7 @@
             <children>
                 <StackPane onMouseClicked="#handleProductTrayAction">
                     <children>
-                        <TextArea fx:id="productTrayLabel" styleClass="tray"/>
+                        <TextArea fx:id="productTrayTextArea" styleClass="tray"/>
                     </children>
                 </StackPane>
             </children>
@@ -106,7 +106,7 @@
             <children>
                 <StackPane onMouseClicked="#handleCoinTrayAction">
                     <children>
-                        <TextArea fx:id="coinTrayLabel" styleClass="tray"/>
+                        <TextArea fx:id="coinTrayTextArea" styleClass="tray"/>
                     </children>
                 </StackPane>
             </children>

@@ -20,6 +20,9 @@ public class VendingMachineActionHandlerFactoryTest {
      */
     private VendingMachineActionHandlerFactory testedFactory = VendingMachineActionHandlerFactory.getInstance();
 
+    /**
+     * Vending machine.
+     */
     private VendingMachine vendingMachine = mock(VendingMachine.class);
 
     /**

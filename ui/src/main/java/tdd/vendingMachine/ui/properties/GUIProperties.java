@@ -18,7 +18,7 @@ public final class GUIProperties extends PropertyManagerAbstr<GUIProperties.Prop
         WINDOW_ICON("window.icon.path", "Application window icon."),
         DISPLAY_INSERT_COINS_TEXT("display.insert.coins.text", "Display insert coins text."),
         COMPONENT_CODE_TEXT_CLASS("component.code.text.class", "Code text filed css class."),
-        EMPTY_SHELF_COLOR("component.empty.shelf.color", "Emtpy shelf color");
+        FULL_OPACITY_CLASS("component.full.opacity.class", "Full opacity css class.");
 
         @Getter
         private final String key;

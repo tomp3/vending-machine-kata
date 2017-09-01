@@ -2,7 +2,6 @@ package tdd.vendingMachine.model.machine;
 
 import com.google.common.collect.Maps;
 import lombok.Getter;
-import lombok.Setter;
 import tdd.vendingMachine.common.number.NumberUtils;
 import tdd.vendingMachine.model.common.CoinType;
 
@@ -26,8 +25,7 @@ public class VendingMachineCash implements Serializable {
      * Map {@code key} represents coin's value and map {@code value} stores the maximum number of coins.
      */
     @Getter
-    @Setter
-    private Map<CoinType, Integer> maxCoins;
+    private final Map<CoinType, Integer> maxCoins;
 
     /**
      * Money inserted by the concrete.

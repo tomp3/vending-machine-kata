@@ -17,6 +17,10 @@ public enum CoinType {
     POINT_TWO(2),
     POINT_ONE(1);
 
+    /**
+     * Array containing all values defined by this enumeration
+     * sorted in the ascending order.
+     */
     private static final CoinType[] COIN_TYPES_ASC;
 
     static {
@@ -39,6 +43,13 @@ public enum CoinType {
         this.value = value;
     }
 
+    /**
+     * Returns all values of this enumeration
+     * sorted in the ascending order.
+     *
+     * @return all values of this enumeration
+     * sorted in the ascending order.
+     */
     public static CoinType[] coinsAscending() {
         return COIN_TYPES_ASC;
     }

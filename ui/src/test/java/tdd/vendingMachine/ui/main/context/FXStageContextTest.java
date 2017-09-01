@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FXStageContextTest {
 
+    /**
+     * JavaFX rule used to initialize JavaFX context.
+     */
     @Rule
     public JavaFXThreadingRule jfxRule = new JavaFXThreadingRule();
 

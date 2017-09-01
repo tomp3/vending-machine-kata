@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class VendingMachineContext implements Serializable {
+public final class VendingMachineContext implements Serializable {
     /**
      * Vending machine context instance.
      */

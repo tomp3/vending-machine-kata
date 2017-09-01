@@ -13,7 +13,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import tdd.vendingMachine.businessLogic.machine.generator.DefaultVendingMachineGenerator;
 import tdd.vendingMachine.businessLogic.machine.generator.VendingMachineGenerator;
-import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.ui.machine.ShelvesPaneManager;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
@@ -25,28 +24,14 @@ import tdd.vendingMachine.ui.machine.actions.concrete.NumberButtonPressedAction;
 import tdd.vendingMachine.ui.machine.handlers.VendingMachineActionHandlerFactory;
 import tdd.vendingMachine.ui.machine.view.converter.CoinTypeButtonConverter;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineViewModel;
-import tdd.vendingMachine.ui.main.context.FXContext;
-import tdd.vendingMachine.ui.properties.GUIProperties;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * FXML vendingMachine.fxml controller.
+ */
 public class VendingMachineController implements Initializable {
-
-    /**
-     * GUIProperties.
-     */
-    private static final GUIProperties GUI_PROPERTIES = GUIProperties.getInstance();
-
-    /**
-     * FXContext.
-     */
-    private static final FXContext fxContext = FXContext.getInstance();
-
-    /**
-     * Vending machine service.
-     */
-    private final VendingMachineService vendingMachineService;
 
     /**
      * Default vending machine generator.
@@ -66,27 +51,41 @@ public class VendingMachineController implements Initializable {
     @FXML
     private VendingMachineViewModel vendingMachineModel;
 
+    /**
+     * Pane containing vending machine shelves.
+     */
     @FXML
     private GridPane shelvesPane;
 
+    /**
+     * Label representing vending machine display.
+     */
     @FXML
     private Label displayLabel;
 
+    /**
+     * Product tray area.
+     */
     @FXML
-    private TextArea productTrayLabel;
+    private TextArea productTrayTextArea;
+    /**
+     * Coin tray area.
+     */
     @FXML
-    private TextArea coinTrayLabel;
+    private TextArea coinTrayTextArea;
 
     /**
      * Constructor initializing basic fields and performing initial configuration.
      * Creates default vending machine using {@link DefaultVendingMachineGenerator}.
      */
     public VendingMachineController() {
-        this.vendingMachineService = VendingMachineService.newVendingMachineService();
         this.vendingMachineGenerator = new DefaultVendingMachineGenerator();
         this.shelvesPaneManager = new ShelvesPaneManager();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.vendingMachineModel = new VendingMachineViewModel(createDefaultVendingMachine());
@@ -95,24 +94,40 @@ public class VendingMachineController implements Initializable {
     }
 
 
+    /**
+     * Creates default vending machine presented and managed using this controller.
+     *
+     * @return default vending machine presented and managed using this controller.
+     */
     private VendingMachine createDefaultVendingMachine() {
         return vendingMachineGenerator.generate();
     }
 
+    /**
+     * Initialises view/graphical components.
+     */
     private void initView() {
         shelvesPaneManager.addShelvesToPane(shelvesPane, vendingMachineModel.getVendingMachine().getShelves());
         displayLabel.textProperty().bind(vendingMachineModel.getDisplay().getTextProperty());
         initTrays();
     }
 
+    /**
+     * Initializes product and coin trays.
+     */
     private void initTrays() {
-        coinTrayLabel.setDisable(true);
-        coinTrayLabel.setWrapText(true);
-        productTrayLabel.setDisable(true);
-        productTrayLabel.setWrapText(true);
+        coinTrayTextArea.setDisable(true);
+        coinTrayTextArea.setWrapText(true);
+        productTrayTextArea.setDisable(true);
+        productTrayTextArea.setWrapText(true);
     }
 
 
+    /**
+     * Method bound to machine code number button press action.
+     *
+     * @param event action event.
+     */
     @FXML
     public void handleCodeButtonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
@@ -121,6 +136,11 @@ public class VendingMachineController implements Initializable {
             .handle();
     }
 
+    /**
+     * Method bound to cancel button press action.
+     *
+     * @param event action event.
+     */
     @FXML
     public void handleCancelButtonAction(ActionEvent event) {
         VendingMachineActionHandlerFactory.getInstance()
@@ -129,6 +149,11 @@ public class VendingMachineController implements Initializable {
         updateCoinTrayUI();
     }
 
+    /**
+     * Method bound to OK button press action.
+     *
+     * @param event action event.
+     */
     @FXML
     public void handleOkButtonAction(ActionEvent event) {
         VendingMachineActionHandlerFactory.getInstance()
@@ -136,6 +161,11 @@ public class VendingMachineController implements Initializable {
             .handle();
     }
 
+    /**
+     * Method bound to coin button press action.
+     *
+     * @param event action event.
+     */
     @FXML
     public void handleCoinButtonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
@@ -146,6 +176,11 @@ public class VendingMachineController implements Initializable {
         updateProductTrayUI();
     }
 
+    /**
+     * Method bound to product tray emptying action (click on the component).
+     *
+     * @param event mouse event.
+     */
     @FXML
     public void handleProductTrayAction(MouseEvent event) {
         VendingMachineActionHandlerFactory.getInstance()
@@ -154,6 +189,11 @@ public class VendingMachineController implements Initializable {
         updateProductTrayUI();
     }
 
+    /**
+     * Method bound to coin tray emptying action (click on the component).
+     *
+     * @param event mouse event.
+     */
     @FXML
     public void handleCoinTrayAction(MouseEvent event) {
         VendingMachineActionHandlerFactory.getInstance()
@@ -162,12 +202,18 @@ public class VendingMachineController implements Initializable {
         updateCoinTrayUI();
     }
 
+    /**
+     * Updates coin tray text area.
+     */
     private void updateCoinTrayUI() {
-        coinTrayLabel.setText(vendingMachineModel.getVendingMachine().getCashTray().coinsToString());
+        coinTrayTextArea.setText(vendingMachineModel.getVendingMachine().getCashTray().coinsToString());
     }
 
+    /**
+     * Updates product tray text area.
+     */
     private void updateProductTrayUI() {
-        productTrayLabel.setText(vendingMachineModel.getVendingMachine().getProductTray().productsToString());
+        productTrayTextArea.setText(vendingMachineModel.getVendingMachine().getProductTray().productsToString());
     }
 
 }

@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import tdd.vendingMachine.model.machine.VendingMachine;
 
+/**
+ * Vending machine view model.
+ */
 @Getter
 @Setter
 public class VendingMachineViewModel {
@@ -28,6 +31,11 @@ public class VendingMachineViewModel {
      */
     private VendingMachineState state;
 
+    /**
+     * Constructor assigning vending machine.
+     *
+     * @param vendingMachine vending machine.
+     */
     public VendingMachineViewModel(VendingMachine vendingMachine) {
         this.vendingMachine = vendingMachine;
         this.display = new VendingMachineDisplay();

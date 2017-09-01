@@ -60,14 +60,14 @@ public abstract class PropertyManagerAbstr<T extends PropertyKey> implements Pro
      * If properties' files could not be read, logs the error
      * and in case the property file is required for the application to run - throws an exception.
      */
-    protected void loadProperties() {
+    private void loadProperties() {
         properties = new Properties();
         try {
             properties.load(PropertyManagerAbstr.class.getClassLoader().getResourceAsStream(getPropertyPath()));
         } catch (Exception e) {
-            LOGGER.error(String.format(ERROR_WHILE_READING_PROPERTIES_MSG,e.getMessage()), e);
+            LOGGER.error(String.format(ERROR_WHILE_READING_PROPERTIES_MSG, e.getMessage()), e);
             if (isRequired()) {
-                throw new PropertyRequiredException(String.format(PROPERTY_REQUIRED_EXCEPTION_MESSAGE, getPropertyPath()));
+                throw new PropertyRequiredException(String.format(PROPERTY_REQUIRED_EXCEPTION_MESSAGE, getPropertyPath()), e);
             }
         }
     }

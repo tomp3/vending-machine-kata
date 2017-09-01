@@ -15,8 +15,6 @@ import tdd.vendingMachine.model.product.ProductType;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
 import tdd.vendingMachine.ui.machine.actions.concrete.InsertCoinAction;
-import tdd.vendingMachine.ui.machine.handlers.InsertCoinActionHandler;
-import tdd.vendingMachine.ui.machine.handlers.VendingMachineActionHandler;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineState;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineViewModel;
 

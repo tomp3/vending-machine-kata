@@ -28,4 +28,14 @@ public class PropertyRequiredException extends RuntimeException {
     public PropertyRequiredException(String message) {
         super(message);
     }
+
+    /**
+     * Constructor assigning the exception message and exception cause.
+     *
+     * @param message exception message.
+     * @param cause   exception cause.
+     */
+    public PropertyRequiredException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

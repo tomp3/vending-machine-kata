@@ -23,6 +23,11 @@ public final class FXStageContext {
     private final ObservableList<Stage> openStages = FXCollections.observableArrayList();
 
     /**
+     * Current stage in form of ObjectProperty.
+     */
+    private final ObjectProperty<Stage> currentStage = new SimpleObjectProperty<>(null);
+
+    /**
      * Default constructor.
      */
     private FXStageContext() {
@@ -45,11 +50,6 @@ public final class FXStageContext {
     public ObservableList<Stage> getOpenStages() {
         return openStages;
     }
-
-    /**
-     * Current stage in form of ObjectProperty.
-     */
-    private final ObjectProperty<Stage> currentStage = new SimpleObjectProperty<>(null);
 
     /**
      * Returns current stage in form of {@link ObjectProperty}.

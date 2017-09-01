@@ -1,8 +1,5 @@
 package tdd.vendingMachine.ui.machine.component;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -12,31 +9,49 @@ import lombok.Getter;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.ui.properties.GUIProperties;
 
+/**
+ * Shelf UI component.
+ */
 public class ShelfComponent extends GridPane {
 
+    /**
+     * GUIProperties instance.
+     */
     private static final GUIProperties GUI_PROPERTIES = GUIProperties.getInstance();
-    private static final String EMPTY_SHELF_COLOR = GUI_PROPERTIES.getProperty(GUIProperties.PropertyKeys.EMPTY_SHELF_COLOR);
-    private static final Background EMPTY_SHELF_BACKGROUND = new Background(new BackgroundFill(Color.valueOf(EMPTY_SHELF_COLOR), null, null));
 
+    /**
+     * Pane containing product container with product name.
+     */
     @Getter
     private StackPane productContainerPane;
+    /**
+     * Product container pane.
+     */
     @Getter
     private Pane productContainer;
+    /**
+     * Text area containing product name.
+     */
     @Getter
     private TextArea nameTextArea;
+    /**
+     * Text area containing shelf code.
+     */
     @Getter
     private TextField codeTextField;
-    @Getter
-    private ObjectProperty<Background> backgroundProperty;
 
+    /**
+     * Constructor creating new shelf component with product container and it's name, as well as shelf code.
+     *
+     * @param code           shelf code.
+     * @param productName    product name.
+     * @param containerColor product container color.
+     * @param shelf          product shelf.
+     */
     public ShelfComponent(String code, String productName, String containerColor, VendingMachineShelf shelf) {
         super();
         setSize(this);
-        this.backgroundProperty = new SimpleObjectProperty<>(shelf.getProducts().isEmpty() ?
-            EMPTY_SHELF_BACKGROUND :
-            new Background(new BackgroundFill(Color.valueOf(containerColor), null, null))
-        );
-        this.productContainer = createProductContainer(backgroundProperty);
+        this.productContainer = createProductContainer(containerColor);
         this.nameTextArea = createNameTextArea(productName);
         this.codeTextField = createCodeTextField(code);
         this.productContainerPane = createStackPane(productContainer, nameTextArea);
@@ -45,6 +60,12 @@ public class ShelfComponent extends GridPane {
         setRowAndColConstraints();
     }
 
+    /**
+     * Creates text field containing shelf code.
+     *
+     * @param code shelf code
+     * @return text field containing shelf code.
+     */
     private TextField createCodeTextField(String code) {
         TextField textField = new TextField();
         setSize(textField);
@@ -54,6 +75,12 @@ public class ShelfComponent extends GridPane {
         return textField;
     }
 
+    /**
+     * Creates text area containing product name.
+     *
+     * @param name product name.
+     * @return text area containing product name.
+     */
     private TextArea createNameTextArea(String name) {
         TextArea ta = new TextArea();
         setSize(ta);
@@ -64,20 +91,39 @@ public class ShelfComponent extends GridPane {
         return ta;
     }
 
-    private Pane createProductContainer(ObservableObjectValue<Background> backgroundProperty) {
+    /**
+     * Creates pane representing product container with the given color.
+     *
+     * @param containerColor container color.
+     * @return pane representing product container with the given color.
+     */
+    private Pane createProductContainer(String containerColor) {
         Pane pane = new Pane();
         setSize(pane);
-        pane.backgroundProperty().bind(backgroundProperty);
+        pane.getStyleClass().add(GUI_PROPERTIES.getProperty(GUIProperties.PropertyKeys.FULL_OPACITY_CLASS));
+        pane.setBackground(new Background(new BackgroundFill(Color.valueOf(containerColor), null, null)));
         return pane;
     }
 
-    private StackPane createStackPane(Node productContainerRectangle, Node nameTextArea) {
+    /**
+     * Creates stack pane packing product container and it's name.
+     *
+     * @param productContainer product container
+     * @param productName      product name.
+     * @return stack pane packing product container and it's name.
+     */
+    private StackPane createStackPane(Node productContainer, Node productName) {
         StackPane stackPane = new StackPane();
         setSize(stackPane);
-        stackPane.getChildren().addAll(productContainerRectangle, nameTextArea);
+        stackPane.getChildren().addAll(productContainer, productName);
         return stackPane;
     }
 
+    /**
+     * Sets default size parameters - min height and width to 1 px, max width and height to {@link Double#MAX_VALUE}.
+     *
+     * @param node node whose parameters are set.
+     */
     private void setSize(Node node) {
         node.minHeight(1);
         node.minWidth(1);
@@ -85,6 +131,9 @@ public class ShelfComponent extends GridPane {
         node.maxWidth(Double.MAX_VALUE);
     }
 
+    /**
+     * Sets default row and column constrains of this object.
+     */
     private void setRowAndColConstraints() {
         this.getRowConstraints().forEach(r -> {
             r.setFillHeight(true);

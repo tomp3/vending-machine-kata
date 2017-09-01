@@ -5,8 +5,6 @@ import org.junit.Test;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
 import tdd.vendingMachine.ui.machine.actions.concrete.NumberButtonPressedAction;
-import tdd.vendingMachine.ui.machine.handlers.NumberButtonPressedActionHandler;
-import tdd.vendingMachine.ui.machine.handlers.VendingMachineActionHandler;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineDisplay;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineState;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineViewModel;
@@ -20,9 +18,14 @@ import static org.mockito.Mockito.when;
  */
 public class NumberButtonPressedActionHandlerTest {
 
+    /**
+     * Vending machine view model.
+     */
     private VendingMachineViewModel vendingMachineViewModel;
 
-
+    /**
+     * Vending machine display.
+     */
     private VendingMachineDisplay display;
 
     @Before

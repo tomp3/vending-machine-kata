@@ -90,3 +90,11 @@
     -fx-opacity: 1.0;
     -fx-background-color: linear-gradient(#e6e6e6, #ffa64d);
 }
+
+.full-opacity {
+    -fx-opacity: 1.0;
+}
+
+.full-opacity:disabled{
+    -fx-opacity: 1.0;
+}
