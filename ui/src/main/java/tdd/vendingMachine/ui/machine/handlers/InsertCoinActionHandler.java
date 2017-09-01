@@ -11,7 +11,7 @@ import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
-import tdd.vendingMachine.ui.machine.actions.VendingMachineActionType;
+import tdd.vendingMachine.ui.machine.actions.concrete.CancelAction;
 import tdd.vendingMachine.ui.machine.actions.concrete.InsertCoinAction;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineState;
 import tdd.vendingMachine.ui.machine.view.model.VendingMachineViewModel;
@@ -103,8 +103,7 @@ public class InsertCoinActionHandler implements VendingMachineActionHandler<Void
             service.insertUserCoin(vendingMachineView.getVendingMachine(), coin);
             return true;
         } catch (CoinInsertionImpossibleException e) {
-            vendingMachineView.getDisplay().setText(e.getMessage());
-            callCancelHandler(vendingMachineView);
+            callCancelHandler(vendingMachineView, e.getMessage());
         }
         return false;
     }
@@ -124,8 +123,7 @@ public class InsertCoinActionHandler implements VendingMachineActionHandler<Void
             vendingMachineView.setState(VendingMachineState.IDLE);
             vendingMachineView.getDisplay().setText(StringUtils.EMPTY);
         } catch (ChangeImpossibleException | ProductUnavailableException e) {
-            vendingMachineView.getDisplay().setText(e.getMessage());
-            callCancelHandler(vendingMachineView);
+            callCancelHandler(vendingMachineView, e.getMessage());
         }
     }
 
@@ -133,11 +131,12 @@ public class InsertCoinActionHandler implements VendingMachineActionHandler<Void
      * Calls {@link CancelActionHandler#handle()} method to cancel the entire transaction.
      *
      * @param vendingMachineView vending machine view model.
+     * @param message            to be displayed.
      */
-    private void callCancelHandler(VendingMachineViewModel vendingMachineView) {
+    private void callCancelHandler(VendingMachineViewModel vendingMachineView, String message) {
         // Create cancel action handler and call it's handle method
         VendingMachineActionHandlerFactory.getInstance()
-            .create(VendingMachineAction.of(VendingMachineActionParameters.of(vendingMachineView), VendingMachineActionType.CANCEL_PRESSED))
+            .create(new CancelAction(VendingMachineActionParameters.of(vendingMachineView, message)))
             .handle();
     }
 }

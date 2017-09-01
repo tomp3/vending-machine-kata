@@ -8,13 +8,13 @@ import tdd.vendingMachine.ui.machine.actions.VendingMachineActionType;
  * Action of transaction cancellation.
  * Parameters hold the amount paid by the concrete.
  */
-public class CancelAction extends VendingMachineActionAbstr<Void> {
+public class CancelAction extends VendingMachineActionAbstr<String> {
     /**
      * Constructor assigning action parameters.
      *
      * @param actionParameters action parameters.
      */
-    public CancelAction(VendingMachineActionParameters<Void> actionParameters) {
+    public CancelAction(VendingMachineActionParameters<String> actionParameters) {
         super(actionParameters);
     }
 

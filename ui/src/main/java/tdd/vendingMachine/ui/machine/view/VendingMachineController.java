@@ -19,6 +19,7 @@ import tdd.vendingMachine.ui.machine.ShelvesPaneManager;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionType;
+import tdd.vendingMachine.ui.machine.actions.concrete.CancelAction;
 import tdd.vendingMachine.ui.machine.actions.concrete.InsertCoinAction;
 import tdd.vendingMachine.ui.machine.actions.concrete.NumberButtonPressedAction;
 import tdd.vendingMachine.ui.machine.handlers.VendingMachineActionHandlerFactory;
@@ -123,8 +124,9 @@ public class VendingMachineController implements Initializable {
     @FXML
     public void handleCancelButtonAction(ActionEvent event) {
         VendingMachineActionHandlerFactory.getInstance()
-            .create(VendingMachineAction.of(VendingMachineActionParameters.of(vendingMachineModel), VendingMachineActionType.CANCEL_PRESSED))
+            .create(new CancelAction(VendingMachineActionParameters.of(vendingMachineModel, StringUtils.EMPTY)))
             .handle();
+        updateCoinTrayUI();
     }
 
     @FXML

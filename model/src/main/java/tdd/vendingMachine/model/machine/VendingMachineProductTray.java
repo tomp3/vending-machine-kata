@@ -3,6 +3,7 @@ package tdd.vendingMachine.model.machine;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
 import tdd.vendingMachine.model.product.Product;
 
 import java.util.List;
@@ -36,7 +37,9 @@ public class VendingMachineProductTray {
      */
     public String productsToString() {
         StringBuilder sb = new StringBuilder();
-        products.forEach(p -> sb.append(sb.length() > 0 ? SPACE : StringUtils.EMPTY).append(p.getProductType().getDispalyName()));
+        MutableInt idx = new MutableInt(0);
+        products.forEach(p -> sb.append(sb.length() > 0 ? SPACE : StringUtils.EMPTY).append("(").append(idx.getAndIncrement()).append(") ")
+            .append(p.getProductType().getDispalyName()));
         return sb.toString();
     }
 }
