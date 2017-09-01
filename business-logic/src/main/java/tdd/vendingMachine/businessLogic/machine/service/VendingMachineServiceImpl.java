@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.service.CashService;
@@ -11,10 +13,12 @@ import tdd.vendingMachine.businessLogic.machine.exception.ProductUnavailableExce
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
 import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.common.CoinType;
+import tdd.vendingMachine.model.common.util.CoinUtils;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.model.product.Product;
+import tdd.vendingMachine.model.product.util.ProductUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -27,6 +31,11 @@ import java.util.stream.Collectors;
  * Default {@link VendingMachineService} implementation.
  */
 class VendingMachineServiceImpl implements VendingMachineService {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(VendingMachineServiceImpl.class);
 
     /**
      * Code already in use exception message.
@@ -61,6 +70,12 @@ class VendingMachineServiceImpl implements VendingMachineService {
      */
     @Override
     public VendingMachine createVendingMachine(VendingMachineCash cash, List<String> availableCodes, Map<String, VendingMachineShelf> shelves) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(cash.getCoins()));
+            LOGGER.debug("Products: ");
+            LOGGER.debug(System.lineSeparator() + ProductUtils.productsToString(shelves));
+        }
         return new VendingMachine(cash, availableCodes, shelves != null ? shelves : Maps.newHashMap());
     }
 
@@ -169,7 +184,12 @@ class VendingMachineServiceImpl implements VendingMachineService {
         // Add product to product tray.
         vendingMachine.getProductTray().getProducts().add(product);
 
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(vendingMachine.getCash().getCoins()));
+            LOGGER.debug("Products: ");
+            LOGGER.debug(System.lineSeparator() + ProductUtils.productsToString(vendingMachine.getShelves()));
+        }
         return ImmutablePair.of(product, change);
     }
 
@@ -181,6 +201,10 @@ class VendingMachineServiceImpl implements VendingMachineService {
         Map<CoinType, Integer> userMoney = vendingMachine.getCash().getUserInsertedMoney();
         Map<CoinType, Integer> userCoins = cashService.giveCoins(vendingMachine.getCash(), userMoney);
         addToCashTray(vendingMachine, userCoins);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(vendingMachine.getCash().getCoins()));
+        }
         return userCoins;
     }
 

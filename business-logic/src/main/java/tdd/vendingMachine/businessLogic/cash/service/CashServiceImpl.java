@@ -2,10 +2,13 @@ package tdd.vendingMachine.businessLogic.cash.service;
 
 
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
 import tdd.vendingMachine.common.currency.CurrencyUtils;
 import tdd.vendingMachine.model.common.CoinType;
+import tdd.vendingMachine.model.common.util.CoinUtils;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
 
 import java.math.BigDecimal;
@@ -16,6 +19,11 @@ import java.util.Map;
  * Default cash service implementation.
  */
 class CashServiceImpl implements CashService {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(CashServiceImpl.class);
 
     /**
      * Instance of service responsible for change calculations.
@@ -30,6 +38,10 @@ class CashServiceImpl implements CashService {
         Map<CoinType, Integer> cashCoins = tryInsertCoins(cash, coins);
         cash.getCoins().clear();
         cash.getCoins().putAll(cashCoins);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(cash.getCoins()));
+        }
     }
 
     /**
@@ -102,6 +114,10 @@ class CashServiceImpl implements CashService {
         coinsToBeGiven.forEach((k, v) -> cash.getCoins().put(k, cash.getCoins().get(k) - v));
         // clear concrete inserted money
         cash.getUserInsertedMoney().clear();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(cash.getCoins()));
+        }
         return coinsToBeGiven;
     }
 
@@ -123,6 +139,10 @@ class CashServiceImpl implements CashService {
      * @return {@code true} if cash has less coins than required to dispose given coins, {@code false} otherwise.
      */
     private boolean cannotGiveCoins(VendingMachineCash cash, Map<CoinType, Integer> coins) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cash coins: ");
+            LOGGER.debug(System.lineSeparator() + CoinUtils.coinsToString(cash.getCoins()));
+        }
         for (Map.Entry<CoinType, Integer> coinEntry : coins.entrySet()) {
             Integer cashCoinCount = cash.getCoins().get(coinEntry.getKey());
             if (cashCoinCount < coinEntry.getValue()) {
