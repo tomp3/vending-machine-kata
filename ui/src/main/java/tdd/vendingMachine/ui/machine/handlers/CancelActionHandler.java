@@ -27,9 +27,9 @@ public class CancelActionHandler implements VendingMachineActionHandler<Void> {
      *
      * @param action handled action.
      */
-    CancelActionHandler(VendingMachineAction action) {
+    CancelActionHandler(VendingMachineAction action, VendingMachineService vendingMachineService) {
         this.action = (CancelAction) action;
-        this.vendingMachineService = VendingMachineService.newVendingMachineService();
+        this.vendingMachineService = vendingMachineService;
     }
 
     /**

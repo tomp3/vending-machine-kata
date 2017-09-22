@@ -44,9 +44,9 @@ public class OkActionHandler implements VendingMachineActionHandler<Void> {
      *
      * @param action handled action.
      */
-    OkActionHandler(VendingMachineAction action) {
+    OkActionHandler(VendingMachineAction action, VendingMachineService vendingMachineService) {
         this.action = action;
-        this.service = VendingMachineService.newVendingMachineService();
+        this.service = vendingMachineService;
     }
 
     /**

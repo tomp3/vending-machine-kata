@@ -1,6 +1,7 @@
 package tdd.vendingMachine.ui.machine.handlers;
 
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
@@ -15,10 +16,12 @@ import static org.mockito.Mockito.mock;
  */
 public class VendingMachineActionHandlerFactoryTest {
 
+    private VendingMachineService service = VendingMachineService.newVendingMachineService();
+
     /**
      * Tested object.
      */
-    private VendingMachineActionHandlerFactory testedFactory = VendingMachineActionHandlerFactory.getInstance();
+    private VendingMachineActionHandlerFactory testedFactory = new VendingMachineActionHandlerFactory(service);
 
     /**
      * Vending machine.

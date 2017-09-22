@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.model.product.Product;
@@ -33,6 +34,11 @@ public class OkActionHandlerTest {
     private VendingMachineAction action;
 
     /**
+     * Vending machine service.
+     */
+    private VendingMachineService vendingMachineService = VendingMachineService.newVendingMachineService();
+
+    /**
      * Vending machine view model.
      */
     private VendingMachineViewModel vendingMachineViewModel;
@@ -48,6 +54,11 @@ public class OkActionHandlerTest {
     private VendingMachineDisplay display;
 
     /**
+     * Tested object instance.
+     */
+    private OkActionHandler testedObject;
+
+    /**
      * Initializes and mocks required attributes.
      */
     @Before
@@ -61,6 +72,7 @@ public class OkActionHandlerTest {
         );
         when(vendingMachineViewModel.getDisplay()).thenReturn(display);
         when(vendingMachineViewModel.getVendingMachine()).thenReturn(vendingMachine);
+        testedObject = new OkActionHandler(action, vendingMachineService);
     }
 
     /**
@@ -79,9 +91,7 @@ public class OkActionHandlerTest {
             ImmutableMap.of(code, shelf)
         );
 
-
-        OkActionHandler handler = new OkActionHandler(action);
-        handler.handle();
+        testedObject.handle();
         assertThat(display.getText())
             .isEqualTo(String.format(GUIProperties.getInstance().getProperty(GUIProperties.PropertyKeys.DISPLAY_INSERT_COINS_TEXT), "1.0"));
     }

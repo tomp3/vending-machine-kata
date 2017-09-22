@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
@@ -34,6 +35,16 @@ public class InsertCoinActionHandlerTest {
     private VendingMachineViewModel vendingMachineViewModel;
 
     /**
+     * Vending machine service.
+     */
+    private VendingMachineService vendingMachineService;
+
+    /**
+     * Vending machine action handler factory.
+     */
+    private VendingMachineActionHandlerFactory actionHandlerFactory;
+
+    /**
      * Initializes vending machine view model before tests.
      */
     @Before
@@ -57,6 +68,9 @@ public class InsertCoinActionHandlerTest {
         vendingMachineViewModel = new VendingMachineViewModel(vendingMachine);
         vendingMachineViewModel.setSelectedCode(code);
         vendingMachineViewModel.setState(VendingMachineState.SELECTED);
+
+        vendingMachineService = VendingMachineService.newVendingMachineService();
+        actionHandlerFactory = new VendingMachineActionHandlerFactory(vendingMachineService);
     }
 
     /**
@@ -65,11 +79,13 @@ public class InsertCoinActionHandlerTest {
     @Test
     public void testHandle() {
         VendingMachineAction action = new InsertCoinAction(VendingMachineActionParameters.of(vendingMachineViewModel, CoinType.TWO));
-        VendingMachineActionHandler handler = new InsertCoinActionHandler(action);
+        VendingMachineActionHandler handler = new InsertCoinActionHandler(action, vendingMachineService, actionHandlerFactory);
         handler.handle();
 
         assertThat(vendingMachineViewModel.getVendingMachine().getCash().getUserInsertedMoney()).containsExactly(MapEntry.entry(CoinType.TWO, 1));
-        new InsertCoinActionHandler(new InsertCoinAction(VendingMachineActionParameters.of(vendingMachineViewModel, CoinType.ONE))).handle();
+        new InsertCoinActionHandler(new InsertCoinAction(VendingMachineActionParameters.of(vendingMachineViewModel, CoinType.ONE)), vendingMachineService,
+            actionHandlerFactory)
+            .handle();
         assertThat(vendingMachineViewModel.getVendingMachine().getProductTray().getProducts()).hasSize(1);
         assertThat(vendingMachineViewModel.getVendingMachine().getCashTray().getCoins())
             .containsOnly(MapEntry.entry(CoinType.POINT_ONE, 1),

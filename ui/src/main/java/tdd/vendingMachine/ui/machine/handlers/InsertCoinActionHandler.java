@@ -40,13 +40,19 @@ public class InsertCoinActionHandler implements VendingMachineActionHandler<Void
     private final VendingMachineService service;
 
     /**
+     * Vending machine action handler factory.
+     */
+    private final VendingMachineActionHandlerFactory actionHandlerFactory;
+
+    /**
      * Constructor assigning handled action.
      *
      * @param action handled action.
      */
-    InsertCoinActionHandler(VendingMachineAction action) {
+    InsertCoinActionHandler(VendingMachineAction action, VendingMachineService vendingMachineService, VendingMachineActionHandlerFactory actionHandlerFactory) {
         this.action = (InsertCoinAction) action;
-        this.service = VendingMachineService.newVendingMachineService();
+        this.service = vendingMachineService;
+        this.actionHandlerFactory = actionHandlerFactory;
     }
 
     /**
@@ -135,7 +141,7 @@ public class InsertCoinActionHandler implements VendingMachineActionHandler<Void
      */
     private void callCancelHandler(VendingMachineViewModel vendingMachineView, String message) {
         // Create cancel action handler and call it's handle method
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(new CancelAction(VendingMachineActionParameters.of(vendingMachineView, message)))
             .handle();
     }

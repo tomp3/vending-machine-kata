@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import tdd.vendingMachine.businessLogic.machine.generator.DefaultVendingMachineGenerator;
 import tdd.vendingMachine.businessLogic.machine.generator.VendingMachineGenerator;
+import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.ui.machine.ShelvesPaneManager;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
@@ -42,6 +43,11 @@ public class VendingMachineController implements Initializable {
      * Shelves pane manager.
      */
     private final ShelvesPaneManager shelvesPaneManager;
+
+    /**
+     * Vending machine action handler factory.
+     */
+    private final VendingMachineActionHandlerFactory actionHandlerFactory;
 
     /**
      * Vending machine.
@@ -81,6 +87,7 @@ public class VendingMachineController implements Initializable {
     public VendingMachineController() {
         this.vendingMachineGenerator = new DefaultVendingMachineGenerator();
         this.shelvesPaneManager = new ShelvesPaneManager();
+        this.actionHandlerFactory = new VendingMachineActionHandlerFactory(VendingMachineService.newVendingMachineService());
     }
 
     /**
@@ -131,9 +138,7 @@ public class VendingMachineController implements Initializable {
     @FXML
     public void handleCodeButtonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
-        VendingMachineActionHandlerFactory.getInstance()
-            .create(new NumberButtonPressedAction(VendingMachineActionParameters.of(vendingMachineModel, button.getText())))
-            .handle();
+        actionHandlerFactory.create(new NumberButtonPressedAction(VendingMachineActionParameters.of(vendingMachineModel, button.getText()))).handle();
     }
 
     /**
@@ -143,7 +148,7 @@ public class VendingMachineController implements Initializable {
      */
     @FXML
     public void handleCancelButtonAction(ActionEvent event) {
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(new CancelAction(VendingMachineActionParameters.of(vendingMachineModel, StringUtils.EMPTY)))
             .handle();
         updateCoinTrayUI();
@@ -156,7 +161,7 @@ public class VendingMachineController implements Initializable {
      */
     @FXML
     public void handleOkButtonAction(ActionEvent event) {
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(VendingMachineAction.of(VendingMachineActionParameters.of(vendingMachineModel), VendingMachineActionType.OK_PRESSED))
             .handle();
     }
@@ -169,7 +174,7 @@ public class VendingMachineController implements Initializable {
     @FXML
     public void handleCoinButtonAction(ActionEvent event) {
         Button button = (Button) event.getSource();
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(new InsertCoinAction(VendingMachineActionParameters.of(vendingMachineModel, CoinTypeButtonConverter.convert(button.getText()))))
             .handle();
         updateCoinTrayUI();
@@ -183,7 +188,7 @@ public class VendingMachineController implements Initializable {
      */
     @FXML
     public void handleProductTrayAction(MouseEvent event) {
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(VendingMachineAction.of(VendingMachineActionParameters.of(vendingMachineModel), VendingMachineActionType.PRODUCT_TRAY_EMPTIED))
             .handle();
         updateProductTrayUI();
@@ -196,7 +201,7 @@ public class VendingMachineController implements Initializable {
      */
     @FXML
     public void handleCoinTrayAction(MouseEvent event) {
-        VendingMachineActionHandlerFactory.getInstance()
+        actionHandlerFactory
             .create(VendingMachineAction.of(VendingMachineActionParameters.of(vendingMachineModel), VendingMachineActionType.COIN_TRAY_EMPTIED))
             .handle();
         updateCoinTrayUI();
