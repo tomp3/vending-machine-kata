@@ -26,6 +26,7 @@
         <exec.plugin.version>1.6.0</exec.plugin.version>
         <log4j2.config.dir>${basedir}/resources/log</log4j2.config.dir>
         <log4j2.config.file>log4j2.xml</log4j2.config.file>
+        <log4j2.test.config.file>test-log4j2.xml</log4j2.test.config.file>
         <jar.final.name>VendingMachineKata</jar.final.name>
         <mainClass>tdd.vendingMachine.ui.main.JavaFXApplication</mainClass>
     </properties>
@@ -109,7 +110,7 @@
                 <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-log4j2</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -125,6 +126,26 @@
                                     <directory>${log4j2.config.dir}</directory>
                                     <filtering>true</filtering>
                                     <include>${log4j2.config.file}</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-test-log4j2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/common/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/model/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/business-logic/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/ui/src/test/resources/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${log4j2.config.dir}</directory>
+                                    <filtering>true</filtering>
+                                    <include>${log4j2.test.config.file}</include>
                                 </resource>
                             </resources>
                         </configuration>
