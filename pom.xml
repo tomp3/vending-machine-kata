@@ -10,6 +10,7 @@
         <module>common</module>
         <module>business-logic</module>
         <module>ui</module>
+        <module>resources</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -23,6 +24,8 @@
         <jar.plugin.version>3.0.2</jar.plugin.version>
         <shade.plugin.version>3.0.0</shade.plugin.version>
         <exec.plugin.version>1.6.0</exec.plugin.version>
+        <log4j2.config.dir>${basedir}/resources/log</log4j2.config.dir>
+        <log4j2.config.file>log4j2.xml</log4j2.config.file>
         <jar.final.name>VendingMachineKata</jar.final.name>
         <mainClass>tdd.vendingMachine.ui.main.JavaFXApplication</mainClass>
     </properties>
@@ -100,6 +103,33 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${jar.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/common/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/model/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/business-logic/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/ui/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/ui/src/main/resources/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${log4j2.config.dir}</directory>
+                                    <filtering>true</filtering>
+                                    <include>${log4j2.config.file}</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
