@@ -11,9 +11,12 @@ import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
 import tdd.vendingMachine.businessLogic.machine.generator.DefaultVendingMachineGenerator;
 import tdd.vendingMachine.businessLogic.machine.generator.VendingMachineGenerator;
 import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.ui.machine.ShelvesPaneManager;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
@@ -48,6 +51,12 @@ public class VendingMachineController implements Initializable {
      * Vending machine action handler factory.
      */
     private final VendingMachineActionHandlerFactory actionHandlerFactory;
+
+    /**
+     * Vending machine service used by {@link #actionHandlerFactory}
+     * and {@link #vendingMachineGenerator}.
+     */
+    private final VendingMachineService vendingMachineService;
 
     /**
      * Vending machine.
@@ -85,9 +94,12 @@ public class VendingMachineController implements Initializable {
      * Creates default vending machine using {@link DefaultVendingMachineGenerator}.
      */
     public VendingMachineController() {
-        this.vendingMachineGenerator = new DefaultVendingMachineGenerator();
+        ShelfService shelfService = ShelfService.newShelfService();
+        this.vendingMachineService =
+            VendingMachineService.newVendingMachineService(shelfService, CashService.newCashService(CoinChangeService.newCoinChangeService()));
+        this.vendingMachineGenerator = new DefaultVendingMachineGenerator(vendingMachineService, shelfService);
         this.shelvesPaneManager = new ShelvesPaneManager();
-        this.actionHandlerFactory = new VendingMachineActionHandlerFactory(VendingMachineService.newVendingMachineService());
+        this.actionHandlerFactory = new VendingMachineActionHandlerFactory(vendingMachineService);
     }
 
     /**

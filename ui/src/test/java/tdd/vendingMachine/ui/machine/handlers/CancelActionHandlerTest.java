@@ -7,7 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.data.MapEntry;
 import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
 import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
@@ -70,7 +73,8 @@ public class CancelActionHandlerTest {
         vendingMachineViewModel.setSelectedCode(code);
         vendingMachineViewModel.setState(VendingMachineState.SELECTED);
 
-        vendingMachineService = VendingMachineService.newVendingMachineService();
+        vendingMachineService = VendingMachineService.newVendingMachineService(ShelfService.newShelfService(), CashService.newCashService(
+            CoinChangeService.newCoinChangeService()));
         actionHandlerFactory = new VendingMachineActionHandlerFactory(vendingMachineService);
     }
 

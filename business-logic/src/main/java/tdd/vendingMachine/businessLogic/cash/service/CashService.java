@@ -14,12 +14,14 @@ import java.util.Map;
 public interface CashService {
 
     /**
-     * Creates default implementation of cash service ({@link CashServiceImpl}).
+     * Creates default implementation of cash service ({@link CashServiceImpl}),
+     * applying given coin change service.
      *
+     * @param coinChangeService coin change service.
      * @return default implementation of cash service ({@link CashServiceImpl}).
      */
-    static CashService newCashService() {
-        return new CashServiceImpl();
+    static CashService newCashService(CoinChangeService coinChangeService) {
+        return new CashServiceImpl(coinChangeService);
     }
 
     /**

@@ -21,7 +21,9 @@ class CoinChangeServiceImpl implements CoinChangeService {
      */
     private static final CoinType[] COIN_TYPES_ASCENDING;
 
-
+    /**
+     * Sorting coin types in the ascending order.
+     */
     static {
         CoinType[] coinTypes = CoinType.values();
         Arrays.sort(coinTypes, Comparator.comparingInt(CoinType::getValue));

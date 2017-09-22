@@ -11,6 +11,7 @@ import org.junit.Test;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
 import tdd.vendingMachine.businessLogic.machine.exception.ProductUnavailableException;
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
 import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
@@ -84,15 +85,17 @@ public class VendingMachineServiceTest {
     /**
      * Shelf service.
      */
-    private final ShelfService shelfService = ShelfService.newShelfService();
+    private ShelfService shelfService;
 
     /**
      * Initializes tested service and vending machine instances.
      */
     @Before
     public void beforeTest() {
-        testedService = VendingMachineService.newVendingMachineService();
-        cash = CashService.newCashService().createCash(MAX_COINS, INITIAL_COINS);
+        shelfService = ShelfService.newShelfService();
+        CashService cashService = CashService.newCashService(CoinChangeService.newCoinChangeService());
+        testedService = VendingMachineService.newVendingMachineService(shelfService, cashService);
+        cash = cashService.createCash(MAX_COINS, INITIAL_COINS);
         shelvesMap = Maps.newHashMap();
         shelvesMap.put("01", new VendingMachineShelf(ProductType.AWESOME_CHOCOLATE_BAR, 20, BigDecimal.valueOf(1.6)));
         shelvesMap.put("02", new VendingMachineShelf(ProductType.COKE_0_33_BOTTLE, 12, BigDecimal.valueOf(2)));

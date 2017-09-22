@@ -3,8 +3,10 @@ package tdd.vendingMachine.businessLogic.machine.service;
 import org.apache.commons.lang3.tuple.Pair;
 import tdd.vendingMachine.businessLogic.cash.exception.ChangeImpossibleException;
 import tdd.vendingMachine.businessLogic.cash.exception.CoinInsertionImpossibleException;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
 import tdd.vendingMachine.businessLogic.machine.exception.ProductUnavailableException;
 import tdd.vendingMachine.businessLogic.machine.exception.UnavailableShelfCodeException;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineCash;
@@ -21,11 +23,14 @@ import java.util.Map;
 public interface VendingMachineService {
     /**
      * Creates the instance of the service using it's default implementation defined in {@link VendingMachineServiceImpl}.
+     * Assigns shelf service and cash service used by the vending machine service.
      *
+     * @param cashService  cash service instance.
+     * @param shelfService shelf service instance.
      * @return service instance.
      */
-    static VendingMachineService newVendingMachineService() {
-        return new VendingMachineServiceImpl();
+    static VendingMachineService newVendingMachineService(ShelfService shelfService, CashService cashService) {
+        return new VendingMachineServiceImpl(shelfService, cashService);
     }
 
     /**

@@ -74,12 +74,23 @@ public class DefaultVendingMachineGenerator implements VendingMachineGenerator {
     /**
      * {@link VendingMachineService} instance.
      */
-    private final VendingMachineService service = VendingMachineService.newVendingMachineService();
+    private final VendingMachineService service;
 
     /**
      * Shelf service.
      */
-    private final ShelfService shelfService = ShelfService.newShelfService();
+    private final ShelfService shelfService;
+
+    /**
+     * Constructor assigning vending machine service and shelf service
+     *
+     * @param vendingMachineService
+     * @param shelfService
+     */
+    public DefaultVendingMachineGenerator(VendingMachineService vendingMachineService, ShelfService shelfService) {
+        this.service = vendingMachineService;
+        this.shelfService = shelfService;
+    }
 
     /**
      * Generates {@link VendingMachine} instance.

@@ -1,7 +1,11 @@
 package tdd.vendingMachine.ui.machine.handlers;
 
+import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
 import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineAction;
 import tdd.vendingMachine.ui.machine.actions.VendingMachineActionParameters;
@@ -16,17 +20,25 @@ import static org.mockito.Mockito.mock;
  */
 public class VendingMachineActionHandlerFactoryTest {
 
-    private VendingMachineService service = VendingMachineService.newVendingMachineService();
-
     /**
      * Tested object.
      */
-    private VendingMachineActionHandlerFactory testedFactory = new VendingMachineActionHandlerFactory(service);
+    private VendingMachineActionHandlerFactory testedFactory;
 
     /**
      * Vending machine.
      */
     private VendingMachine vendingMachine = mock(VendingMachine.class);
+
+    /**
+     * Initializes tested object.
+     */
+    @Before
+    public void beforeTests() {
+        testedFactory =
+            new VendingMachineActionHandlerFactory(VendingMachineService.newVendingMachineService(ShelfService.newShelfService(), CashService.newCashService(
+                CoinChangeService.newCoinChangeService())));
+    }
 
     /**
      * Tests creation of handlers.

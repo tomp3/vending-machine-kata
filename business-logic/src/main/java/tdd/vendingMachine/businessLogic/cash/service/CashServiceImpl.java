@@ -28,7 +28,16 @@ class CashServiceImpl implements CashService {
     /**
      * Instance of service responsible for change calculations.
      */
-    private final CoinChangeService coinChangeService = CoinChangeService.newCoinChangeService();
+    private final CoinChangeService coinChangeService;
+
+    /**
+     * Constructor assigning coin change service.
+     *
+     * @param coinChangeService coin change service;
+     */
+    CashServiceImpl(CoinChangeService coinChangeService) {
+        this.coinChangeService = coinChangeService;
+    }
 
     /**
      * {@inheritDoc}

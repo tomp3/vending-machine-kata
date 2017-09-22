@@ -58,12 +58,23 @@ class VendingMachineServiceImpl implements VendingMachineService {
     /**
      * Shelf service.
      */
-    private final ShelfService shelfService = ShelfService.newShelfService();
+    private final ShelfService shelfService;
 
     /**
      * Cash service.
      */
-    private final CashService cashService = CashService.newCashService();
+    private final CashService cashService;
+
+    /**
+     * Constructor assigning shelf service and cash service.
+     *
+     * @param shelfService shelf service instance.
+     * @param cashService  cash service instance.
+     */
+    VendingMachineServiceImpl(ShelfService shelfService, CashService cashService) {
+        this.shelfService = shelfService;
+        this.cashService = cashService;
+    }
 
     /**
      * {@inheritDoc}

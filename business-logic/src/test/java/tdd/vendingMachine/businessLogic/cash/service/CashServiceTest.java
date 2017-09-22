@@ -45,7 +45,7 @@ public class CashServiceTest {
     /**
      * Tested object instance.
      */
-    private CashService testedService = CashService.newCashService();
+    private CashService testedService = CashService.newCashService(CoinChangeService.newCoinChangeService());
 
     /**
      * Method testing methods inserting coins to the cash.

@@ -1,7 +1,12 @@
 package tdd.vendingMachine.businessLogic.machine.generator;
 
 import org.assertj.core.data.MapEntry;
+import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
+import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.common.CoinType;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.product.ProductType;
@@ -16,7 +21,17 @@ public class DefaultVendingMachineGeneratorTest {
     /**
      * Tested object.
      */
-    private VendingMachineGenerator generator = new DefaultVendingMachineGenerator();
+    private VendingMachineGenerator generator;
+
+    /**
+     * Initializes tested object.
+     */
+    @Before
+    public void beforeTest() {
+        ShelfService shelfService = ShelfService.newShelfService();
+        generator = new DefaultVendingMachineGenerator(
+            VendingMachineService.newVendingMachineService(shelfService, CashService.newCashService(CoinChangeService.newCoinChangeService())), shelfService);
+    }
 
     /**
      * Tests {@link DefaultVendingMachineGenerator#generate()} method.

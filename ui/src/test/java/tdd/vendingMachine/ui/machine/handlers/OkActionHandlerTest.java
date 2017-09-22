@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
+import tdd.vendingMachine.businessLogic.cash.service.CashService;
+import tdd.vendingMachine.businessLogic.cash.service.CoinChangeService;
 import tdd.vendingMachine.businessLogic.machine.service.VendingMachineService;
+import tdd.vendingMachine.businessLogic.shelf.service.ShelfService;
 import tdd.vendingMachine.model.machine.VendingMachine;
 import tdd.vendingMachine.model.machine.VendingMachineShelf;
 import tdd.vendingMachine.model.product.Product;
@@ -36,7 +39,7 @@ public class OkActionHandlerTest {
     /**
      * Vending machine service.
      */
-    private VendingMachineService vendingMachineService = VendingMachineService.newVendingMachineService();
+    private VendingMachineService vendingMachineService;
 
     /**
      * Vending machine view model.
@@ -72,6 +75,8 @@ public class OkActionHandlerTest {
         );
         when(vendingMachineViewModel.getDisplay()).thenReturn(display);
         when(vendingMachineViewModel.getVendingMachine()).thenReturn(vendingMachine);
+        vendingMachineService = VendingMachineService.newVendingMachineService(ShelfService.newShelfService(), CashService.newCashService(
+            CoinChangeService.newCoinChangeService()));
         testedObject = new OkActionHandler(action, vendingMachineService);
     }
 
